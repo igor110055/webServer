@@ -1,0 +1,18 @@
+#lcoal
+database:
+  driverName: mysql
+  host: localhost
+  port: "3306"
+  databaseName: pool
+  username: root
+  password: root
+  charset: utf8mb4
+  loc: Asia/Shanghai
+
+#nodes:
+#  length: 1
+#  node0: "https://data-seed-prebsc-2-s2.binance.org:8545/"
+
+node: "https://data-seed-prebsc-2-s2.binance.org:8545/"
+
+controllerAddress: "11111111"
