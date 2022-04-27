@@ -21,3 +21,19 @@ func GetPictures(t string) *[]Picture {
 	}
 	return &result
 }
+
+func GetSuppliesList() {
+
+}
+
+func GetBorrowsList() {
+
+}
+
+func GetPoolList() {
+
+}
+
+func GetPoolDetail() {
+
+}

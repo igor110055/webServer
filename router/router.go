@@ -25,12 +25,21 @@ func CollectRoute(r *gin.Engine) {
 	common := apiVersion.Group(config.COMMON)
 	commonRouter(common)
 
+	pool := apiVersion.Group(config.POOL)
+	poolRouter(pool)
 }
 
 func commonRouter(r *gin.RouterGroup) {
 	r.GET("/getTimeStamp", GetTimeStamp)
 	r.GET("/getTokenByAddress", GetTokenByAddress)
 	r.GET("/getPictures", GetPictures)
+}
+
+func poolRouter(r *gin.RouterGroup) {
+	r.POST("/getSuppliesList", GetTimeStamp)
+	r.POST("/getBorrowsList", GetTokenByAddress)
+	r.POST("/getPoolList", GetPictures)
+	r.POST("/getPoolDetail", GetPictures)
 }
 
 /**

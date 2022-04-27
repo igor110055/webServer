@@ -8,17 +8,8 @@ var (
 	V1           = "/v1"
 	API_V1_GROUP = API + V1
 
-	// AGGREGATOR aggregator Group
-	AGGREGATOR = "/aggregator"
-
-	// GAME game Group
-	GAME = "/game"
-
-	// IGO igo Group
-	IGO = "/igo"
-
-	// TOKEN igo Group
-	TOKEN = "/token"
+	// POOL Group
+	POOL = "/pool"
 
 	// COMMON common
 	COMMON = "/common"
