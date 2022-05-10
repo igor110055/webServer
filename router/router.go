@@ -36,10 +36,13 @@ func commonRouter(r *gin.RouterGroup) {
 }
 
 func poolRouter(r *gin.RouterGroup) {
-	r.POST("/getSuppliesList", GetTimeStamp)
-	r.POST("/getBorrowsList", GetTokenByAddress)
-	r.POST("/getPoolList", GetPictures)
-	r.POST("/getPoolDetail", GetPictures)
+
+	r.POST("/getDepositList", GetDepositList)
+	r.POST("/getBorrowsList", GetBorrowsList)
+
+	r.POST("/getPoolList", GetPoolList)
+	r.GET("/getPoolDetail", GetPoolDetail)
+
 }
 
 /**

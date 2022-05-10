@@ -21,7 +21,6 @@ var (
 	DB                 *gorm.DB
 	CLIENT             *ethclient.Client
 	ControllerContract controller
-	//MutexObject *Mu
 )
 
 type controller struct {
@@ -31,7 +30,6 @@ type controller struct {
 
 func init() {
 	APPVIPER = initAppConfig()
-	//MutexObject = initMutex()
 }
 
 func initAppConfig() *viper.Viper {
@@ -100,19 +98,6 @@ func initClient(viper *viper.Viper) {
 	log.Infoln("connect client success")
 	CLIENT = client
 }
-
-//type Mu struct {
-//	Mutex *sync.Mutex //Mutex实例
-//	Num   int         //调用次数
-//}
-//
-//func initMutex() *Mu {
-//	mutex := sync.Mutex{}
-//	return &Mu{
-//		Mutex: &mutex,
-//		Num:   0,
-//	}
-//}
 
 //gorm 打印sql回调方法
 func callback(option *gorm.DB) {

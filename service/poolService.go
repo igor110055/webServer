@@ -1,16 +1,22 @@
 package service
 
-import "poolServer/db"
+import (
+	"poolServer/db"
+	"poolServer/vo"
+)
 
-func GetSuppliesListService() {
-	db.GetSuppliesList()
+func GetSuppliesListService(req *vo.ReqVo) {
+	db.GetSuppliesList(req.Account, req.PageVo.PageSize, req.PageVo.PageNum)
 }
-func GetBorrowsListService() {
-	db.GetBorrowsList()
+
+func GetBorrowsListService(req *vo.ReqVo) {
+	db.GetBorrowsList(req.Account, req.PageVo.PageSize, req.PageVo.PageNum)
 }
-func GetPoolListService() {
-	db.GetPoolList()
+
+func GetPoolListService(req *vo.ReqVo) {
+	db.GetPoolList(req.PageVo.PageSize, req.PageVo.PageNum)
 }
-func GetPoolDetail() {
-	db.GetPoolDetail()
+
+func GetPoolDetail(id int64) {
+	db.GetPoolDetail(id)
 }

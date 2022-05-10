@@ -1,5 +1,11 @@
 package vo
 
+type ReqVo struct {
+	PageVo  `json:"pageVo"`
+	Account string `json:"account"`
+	Id      string `json:"id"`
+}
+
 type PageVo struct {
 	PageNum   int64 `json:"pageNum"`
 	PageSize  int64 `json:"pageSize"`
