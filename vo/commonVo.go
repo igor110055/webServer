@@ -1,9 +1,15 @@
 package vo
 
+import "poolServer/config"
+
 type ReqVo struct {
-	PageVo  `json:"pageVo"`
-	Account string `json:"account"`
-	Id      string `json:"id"`
+	PageVo           `json:"pageVo"`
+	Id               string `json:"id"`
+	Address          string `json:"address"`
+	NFTAddress       string `json:"nftAddress"`
+	TokenId          string `json:"tokenId"`
+	DelegatorAddress string `json:"delegatorAddress"`
+	Type             string `json:"type"`
 }
 
 type PageVo struct {
@@ -16,15 +22,23 @@ type ResponsePageVo struct {
 	PageNum   int64       `json:"pageNum"`
 	PageSize  int64       `json:"pageSize"`
 	TotalSize int64       `json:"totalSize"`
-	Code      int         `json:"code"`
+	Code      int64       `json:"code"`
 	Message   string      `json:"message"`
 	Data      interface{} `json:"data"`
 }
 
+func NewResponsePageVo(pageNum, pageSize, totalSize, code int64, data interface{}) *ResponsePageVo {
+	return &ResponsePageVo{PageNum: pageNum, PageSize: pageSize, TotalSize: totalSize, Code: code, Message: config.GetMsg(code), Data: data}
+}
+
 type ResponseVo struct {
-	Code    int         `json:"code"`
+	Code    int64       `json:"code"`
 	Message string      `json:"message"`
 	Data    interface{} `json:"data"`
+}
+
+func NewResponseVo(code int64, data interface{}) *ResponseVo {
+	return &ResponseVo{Code: code, Message: config.GetMsg(code), Data: data}
 }
 
 type MoralisVo struct {
@@ -45,9 +59,9 @@ type MoralisVo struct {
 		TokenURI          interface{} `json:"token_uri"`
 		Metadata          interface{} `json:"metadata"`
 		SyncedAt          interface{} `json:"synced_at"`
-		IsValid           int         `json:"is_valid"`
-		Syncing           int         `json:"syncing"`
-		Frozen            int         `json:"frozen"`
+		IsValid           int64       `json:"is_valid"`
+		Syncing           int64       `json:"syncing"`
+		Frozen            int64       `json:"frozen"`
 	} `json:"result"`
 	Status string `json:"status"`
 }

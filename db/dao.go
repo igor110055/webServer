@@ -3,6 +3,7 @@ package db
 import (
 	log "github.com/sirupsen/logrus"
 	"poolServer/config"
+	"poolServer/vo"
 )
 
 func GetPictures(t string) *[]Picture {
@@ -10,62 +11,89 @@ func GetPictures(t string) *[]Picture {
 	res := config.DB.Table("picture").Where("type = ? and deleted = 0", t).Find(&result)
 	if res.Error != nil {
 		log.Error(res.Error)
+		return nil
 	}
 	return &result
 }
 
-func GetSuppliesList(account string, pageSize, pageNum int64) (*[]Pool, int64) {
-	var result []Pool
+func GetDepositList(account string, pageNum, pageSize int64) (*[]vo.PoolListVo, int64) {
+	var result []vo.PoolListVo
 	var totalSize int64
 	res := config.DB.
-		Select("pool.*").
-		Joins("left join token on token.pool_address = pool.address"+
-			"and token.deleted = 0"+
-			"and token.mortgagor = ?", account).
-		Where("pool.deleted = 0 and pool.status = 1 ").
+		Table("pool p").
+		Select("p.id,"+
+			"p.name,"+
+			"p.uri,"+
+			"p.address,"+
+			"p.created_time,"+
+			"p.updated_time,"+
+			"pt.token_name as rewards_token_name,"+
+			"pt.token_address as rewards_token_address,"+
+			"pt.type,"+
+			"pt.wrapper_address,"+
+			"pt.wnft_address,"+
+			"t.delegator_address ").
+		Joins("LEFT JOIN pool_token pt ON pt.pool_id = p.id and pt.deleted = 0 and pt.status = 1").
+		Joins("LEFT JOIN token t ON t.pool_address = p.address and t.deleted = 0").
+		Where("p.deleted = 0 and  t.mortgagor = ?", account).
+		Order("p.created_time desc").
 		Limit(int(pageSize)).Offset(int((pageNum - 1) * pageSize)).
 		Find(&result)
 	if res.Error != nil {
 		log.Error(res.Error)
+		return nil, 0
 	}
 
 	countResult := config.DB.
-		Table("pool").
-		Joins("left join token on token.pool_address = pool.address"+
-			"and token.deleted = 0"+
-			"and token.borrower = ?", account).
-		Where("pool.deleted = 0 and pool.status = -1 ").
+		Table("pool p").
+		Joins("LEFT JOIN pool_token pt ON pt.pool_id = p.id and pt.deleted = 0 and pt.status = 1").
+		Joins("LEFT JOIN token t ON t.pool_address = p.address and t.deleted = 0").
+		Where("p.deleted = 0 and  t.mortgagor = ?", account).
 		Count(&totalSize)
 	if countResult.Error != nil {
 		log.Error(countResult.Error)
+		return nil, 0
 	}
 	return &result, totalSize
 }
 
-func GetBorrowsList(account string, pageSize, pageNum int64) (*[]Pool, int64) {
-	var result []Pool
+func GetBorrowsList(account string, pageSize, pageNum int64) (*[]vo.PoolListVo, int64) {
+	var result []vo.PoolListVo
 	var totalSize int64
 	res := config.DB.
-		Select("pool.*").
-		Joins("left join token on token.pool_address = pool.address"+
-			"and token.deleted = 0"+
-			"and token.borrower = ?", account).
-		Where("pool.deleted = 0 and pool.status = -1 ").
+		Table("pool p").
+		Select("p.id,"+
+			"p.name,"+
+			"p.uri,"+
+			"p.address,"+
+			"p.created_time,"+
+			"p.updated_time,"+
+			"pt.token_name as rewards_token_name,"+
+			"pt.token_address as rewards_token_address,"+
+			"pt.type,"+
+			"pt.wrapper_address,"+
+			"pt.wnft_address,"+
+			"t.delegator_address ").
+		Joins("LEFT JOIN pool_token pt ON pt.pool_id = p.id and pt.deleted = 0 and pt.status = 1").
+		Joins("LEFT JOIN token t ON t.pool_address = p.address and t.deleted = 0").
+		Where("p.deleted = 0 and  t.borrower = ?", account).
+		Order("p.created_time desc").
 		Limit(int(pageSize)).Offset(int((pageNum - 1) * pageSize)).
 		Find(&result)
 	if res.Error != nil {
 		log.Error(res.Error)
+		return nil, 0
 	}
 
 	countResult := config.DB.
-		Table("pool").
-		Joins("left join token on token.pool_address = pool.address"+
-			"and token.deleted = 0"+
-			"and token.borrower = ?", account).
-		Where("pool.deleted = 0 and pool.status = -1 ").
+		Table("pool p").
+		Joins("LEFT JOIN pool_token pt ON pt.pool_id = p.id and pt.deleted = 0 and pt.status = 1").
+		Joins("LEFT JOIN token t ON t.pool_address = p.address and t.deleted = 0").
+		Where("p.deleted = 0 and  t.mortgagor = ?", account).
 		Count(&totalSize)
 	if countResult.Error != nil {
 		log.Error(countResult.Error)
+		return nil, 0
 	}
 	return &result, totalSize
 }
@@ -80,6 +108,7 @@ func GetPoolList(pageSize, pageNum int64) (*[]Pool, int64) {
 		Find(&result)
 	if res.Error != nil {
 		log.Error(res.Error)
+		return nil, 0
 	}
 
 	countResult := config.DB.
@@ -88,18 +117,33 @@ func GetPoolList(pageSize, pageNum int64) (*[]Pool, int64) {
 		Count(&totalSize)
 	if countResult.Error != nil {
 		log.Error(countResult.Error)
+		return nil, 0
 	}
 	return &result, totalSize
 }
 
-func GetPoolDetail(id int64) *[]Pool {
-	var result []Pool
+func GetPoolById(id int64) *vo.PoolDetailVo {
+	var result vo.PoolDetailVo
 	res := config.DB.
 		Table("pool").
-		Where(" id = ? and deleted = 0", id).
+		Where("deleted = 0 and id = ?", id).
 		Find(&result)
 	if res.Error != nil {
 		log.Error(res.Error)
+		return nil
+	}
+	return &result
+}
+
+func GetPoolTokenByPoolId(id int64) *[]PoolToken {
+	var result []PoolToken
+	res := config.DB.
+		Table("pool_token").
+		Where("deleted = 0 and pool_id = ?", id).
+		Find(&result)
+	if res.Error != nil {
+		log.Error(res.Error)
+		return nil
 	}
 	return &result
 }

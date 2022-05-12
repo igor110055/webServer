@@ -6,13 +6,13 @@ import (
 	"time"
 )
 
-func GetResponsePageVo(code int, message string, data *vo.ResponsePageVo) *vo.ResponsePageVo {
+func GetResponsePageVo(code int64, message string, data *vo.ResponsePageVo) *vo.ResponsePageVo {
 	data.Code = code
 	data.Message = message
 	return data
 }
 
-func GetResponseVo(code int, message string, data interface{}) *vo.ResponseVo {
+func GetResponseVo(code int64, message string, data interface{}) *vo.ResponseVo {
 	responseVo := vo.ResponseVo{
 		Code:    code,
 		Message: message,
@@ -22,12 +22,12 @@ func GetResponseVo(code int, message string, data interface{}) *vo.ResponseVo {
 }
 
 type NftVo struct {
-	Id        int    `json:"ID"` // ID
-	ProjectId int    `json:"projectId"`
-	Level     int    `json:"level"`
+	Id        int64  `json:"ID"` // ID
+	ProjectId int64  `json:"projectId"`
+	Level     int64  `json:"level"`
 	Status    string `json:"status"`
 	Address   string `json:"address"`
-	Number    int    `json:"number"`
+	Number    int64  `json:"number"`
 }
 
 func TimeStampToTime(tm int64) time.Time {

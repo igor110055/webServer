@@ -14,24 +14,25 @@ var (
 	// COMMON common
 	COMMON = "/common"
 
-	SUCCESS        = 2000
-	ERROR          = 5000
-	INVALID_PARAMS = 4000
-	UPLOADERROR    = 4001
-	DBERROR        = 4002
-	GETERROR       = 4003
+	SUCCESS = int64(2000)
+	ERROR   = int64(5000)
+
+	INVALID_PARAMS = int64(4000)
+	INTERNAL_ERROR = int64(4001)
+	DBERROR        = int64(4002)
+	GETERROR       = int64(4003)
 )
 
-var MsgFlags = map[int]string{
+var MsgFlags = map[int64]string{
 	SUCCESS:        "Success",
 	ERROR:          "Fail",
-	UPLOADERROR:    "Upload Picture Error",
+	INTERNAL_ERROR: "Internal Error",
 	INVALID_PARAMS: "Request Parameter Error",
 	DBERROR:        "Update Database Error",
 	GETERROR:       "Get Price Error",
 }
 
-func GetMsg(code int) string {
+func GetMsg(code int64) string {
 	msg, ok := MsgFlags[code]
 	if ok {
 		return msg

@@ -3,33 +3,55 @@ package db
 import "time"
 
 type Pool struct {
-	Id           int64     `gorm:"id" json:"id"`
-	CreatedTime  time.Time `gorm:"created_time" json:"created_time"`
-	UpdatedTime  time.Time `gorm:"updated_time" json:"updated_time"`
-	Address      string    `gorm:"address" json:"address"` // 合约地址
-	Deleted      int64     `gorm:"deleted" json:"deleted"`
-	Owner        string    `gorm:"owner" json:"owner"` // 创建账户
-	Uri          string    `gorm:"uri" json:"uri"`
-	Name         string    `gorm:"name" json:"name"`
-	TokenAddress string    `gorm:"token_address" json:"tokenAddress"`
-	TokenName    string    `gorm:"token_name" json:"tokenName"`
+	Id            int64  `gorm:"id" json:"id"`
+	CreatedTime   string `gorm:"created_time" json:"created_time"`
+	UpdatedTime   string `gorm:"updated_time" json:"updated_time"`
+	Deleted       int64  `gorm:"deleted" json:"deleted"`
+	Address       string `gorm:"address" json:"address"` // 合约地址
+	Owner         string `gorm:"owner" json:"owner"`     // 创建账户
+	Uri           string `gorm:"uri" json:"uri"`
+	Name          string `gorm:"name" json:"name"`
+	EffectiveTime string `gorm:"effective_time" json:"effective_time"` // 生效时间
+	Rate          string `gorm:"rate" json:"rate"`                     // 基础利率值
+	NewRate       string `gorm:"new_rate" json:"new_rate"`             // 新基础利率值
 }
 
 func (Pool) TableName() string {
 	return "pool"
 }
 
+type PoolToken struct {
+	Id             int64  `gorm:"id" json:"id"`
+	CreatedTime    string `gorm:"created_time" json:"created_time"`
+	UpdatedTime    string `gorm:"updated_time" json:"updated_time"`
+	Deleted        int64  `gorm:"deleted" json:"deleted"` // 如果赎回就变为-1
+	PoolId         string `gorm:"pool_id" json:"pool_id"`
+	TokenId        string `gorm:"token_id" json:"token_id"`
+	TokenUri       string `gorm:"token_uri" json:"token_uri"`
+	TokenName      string `gorm:"token_name" json:"token_name"`
+	TokenAddress   string `gorm:"token_address" json:"token_address"`
+	Status         string `gorm:"status" json:"status"` // 0 need/1 rewards
+	WrapperAddress string `gorm:"wrapper_address" json:"wrapper_address"`
+	WNFTAddress    string `gorm:"wnft_address" json:"wnft_address"`
+	Type           string `gorm:"type" json:"type"`
+}
+
+func (PoolToken) TableName() string {
+	return "pool_token"
+}
+
 type Token struct {
-	Id           int64     `gorm:"id" json:"id"`
-	CreatedTime  time.Time `gorm:"created_time" json:"created_time"`
-	UpdatedTime  time.Time `gorm:"updated_time" json:"updated_time"`
-	Deleted      int64     `gorm:"deleted" json:"deleted"`
-	PoolAddress  string    `gorm:"pool_address" json:"pool_address"`
-	TokenId      int64     `gorm:"token_id" json:"token_id"`
-	TokenAddress string    `gorm:"token_address" json:"token_address"`
-	Borrower     string    `gorm:"borrower" json:"borrower"`   // 借款方
-	Mortgagor    string    `gorm:"mortgagor" json:"mortgagor"` // 抵押方
-	Status       int64     `gorm:"status" json:"status"`       // token状态初始值为0（未进入借贷池或已被赎回），存入pool为1，借出为-1，
+	Id               int64  `gorm:"id" json:"id"`
+	CreatedTime      string `gorm:"created_time" json:"created_time"`
+	UpdatedTime      string `gorm:"updated_time" json:"updated_time"`
+	Deleted          int64  `gorm:"deleted" json:"deleted"` // 如果赎回就变为-1
+	PoolAddress      string `gorm:"pool_address" json:"pool_address"`
+	TokenId          string `gorm:"token_id" json:"token_id"`
+	TokenAddress     string `gorm:"token_address" json:"token_address"`
+	Borrower         string `gorm:"borrower" json:"borrower"`   // 借款人
+	Mortgagor        string `gorm:"mortgagor" json:"mortgagor"` // 抵押人
+	Status           int64  `gorm:"status" json:"status"`       // token状态初始值为0已被赎回，存入pool为1，借出为-1
+	DelegatorAddress string `gorm:"delegator_address" json:"delegator_address"`
 }
 
 func (Token) TableName() string {
