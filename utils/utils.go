@@ -42,7 +42,7 @@ func TimeStampToTime(tm int64) time.Time {
 	return duration
 }
 
-func GetMoralis(address, nft string) *vo.MoralisVo {
+func GetMoralis(address, nft string) *vo.ResponsePageVo {
 	var data vo.MoralisVo
 	req, _ := http.NewRequest("GET", config.MORALIS.Url+address+"/nft/"+nft+"?chain="+
 		config.MORALIS.ChainId, nil)
@@ -58,5 +58,18 @@ func GetMoralis(address, nft string) *vo.MoralisVo {
 		body, _ := ioutil.ReadAll(resp.Body)
 		json.Unmarshal(body, &data)
 	}
-	return &data
+
+	//重新组装数据
+	var tokenVos []vo.TokenVo
+	for _, v := range data.Result {
+		tokenVo := vo.TokenVo{
+			TokenId:      v.TokenId,
+			TokenAddress: v.TokenAddress,
+			TokenSymbol:  v.Symbol,
+			TokenName:    v.Name,
+			TokenUri:     v.TokenURI,
+		}
+		tokenVos = append(tokenVos, tokenVo)
+	}
+	return vo.NewResponsePageVo(data.Page, data.PageSize, data.Total, config.SUCCESS, tokenVos)
 }

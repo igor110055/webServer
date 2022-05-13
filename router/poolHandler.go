@@ -100,7 +100,7 @@ func GetNFTs(c *gin.Context) {
 	//记录日志
 	defer c.Set("req", reqVo)
 
-	result := service.GetBorrowsListService(&reqVo)
+	result := service.GetNFTs(&reqVo)
 	if result == nil {
 		c.JSON(http.StatusOK, vo.NewResponseVo(config.INTERNAL_ERROR, nil))
 		return

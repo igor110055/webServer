@@ -65,12 +65,3 @@ type MoralisVo struct {
 	} `json:"result"`
 	Status string `json:"status"`
 }
-
-type Price struct {
-	Price string `json:"price"`
-}
-
-type BinancePrice struct {
-	Symbol string `json:"symbol"`
-	Price  string `json:"price"`
-}

@@ -3,6 +3,7 @@ package service
 import (
 	"poolServer/config"
 	"poolServer/db"
+	"poolServer/utils"
 	"poolServer/vo"
 )
 
@@ -15,21 +16,6 @@ func GetDepositListService(req *vo.ReqVo) *vo.ResponsePageVo {
 }
 
 func GetBorrowsListService(req *vo.ReqVo) *vo.ResponsePageVo {
-
-	switch req.Type {
-
-	case "1":
-		//要查moerios接口的 wallet
-		break
-	case "2":
-		//deposited 我质押进去的 查token表 字段mortgagor
-		//myWNFT 转换出来的专门查wnft表
-		//amount 借nft 查token表 字段pool_address status=1
-		//repay set delegator归还nft 查token表 字段borrower = account status=-1 pool_address
-		break
-
-	}
-
 	res, totalSize := db.GetBorrowsList(req.Address, req.PageVo.PageNum, req.PageVo.PageSize)
 	if res == nil && totalSize == 0 {
 		return nil
@@ -65,4 +51,34 @@ func GetPoolDetail(id int64) *vo.ResponseVo {
 		}
 	}
 	return vo.NewResponseVo(config.SUCCESS, poolDetail)
+}
+
+func GetNFTs(req *vo.ReqVo) *vo.ResponsePageVo {
+	switch req.Type {
+
+	case "1":
+		//要查moerios接口的 wallet
+		if req.Address == "" || req.NFTAddress == "" {
+			return nil
+		}
+
+		moralis := utils.GetMoralis(req.Address, req.NFTAddress)
+		if moralis == nil {
+			return nil
+		}
+		return moralis
+		break
+
+	case "2":
+		//deposited 我质押进去的 查token表 字段mortgagor
+		//myWNFT 转换出来的专门查wnft表
+		//amount 借nft 查token表 字段pool_address status=1
+		//repay set delegator归还nft 查token表 字段borrower = account status=-1 pool_address
+		break
+
+	default:
+		return nil
+	}
+
+	return nil
 }
