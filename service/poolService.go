@@ -6,16 +6,16 @@ import (
 	"poolServer/vo"
 )
 
-func GetDepositListService(req *vo.ReqVo) *vo.ResponsePageVo {
-	res, totalSize := db.GetDepositList(req.Address, req.PageVo.PageNum, req.PageVo.PageSize)
+func GetDepositListService(req *vo.ReqPoolVo) *vo.ResponsePageVo {
+	res, totalSize := db.GetPoolsByQuery(req)
 	if res == nil && totalSize == 0 {
 		return nil
 	}
 	return vo.NewResponsePageVo(req.PageVo.PageNum, req.PageVo.PageSize, totalSize, config.SUCCESS, res)
 }
 
-func GetBorrowsListService(req *vo.ReqVo) *vo.ResponsePageVo {
-	res, totalSize := db.GetBorrowsList(req.Address, req.PageVo.PageNum, req.PageVo.PageSize)
+func GetBorrowsListService(req *vo.ReqPoolVo) *vo.ResponsePageVo {
+	res, totalSize := db.GetPoolsByQuery(req)
 	if res == nil && totalSize == 0 {
 		return nil
 	}
