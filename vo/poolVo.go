@@ -2,6 +2,27 @@ package vo
 
 import "time"
 
+type ReqPoolVo struct {
+	PageVo           `json:"pageVo"`
+	Id               int64  `json:"id"`
+	TokenId          string `json:"tokenId"`
+	DelegatorAddress string `json:"delegatorAddress"`
+	Borrower         string `json:"borrower"`  // 借款人
+	Mortgagor        string `json:"mortgagor"` // 抵押人
+}
+
+type ReqNFTVo struct {
+	PageVo           `json:"pageVo"`
+	TokenId          string `json:"tokenId"`
+	DelegatorAddress string `json:"delegatorAddress"`
+	Status           string `json:"status"`
+	PoolAddress      string `json:"poolAddress"`
+	Borrower         string `json:"borrower"`  // 借款人
+	Mortgagor        string `json:"mortgagor"` // 抵押人
+	Address          string `json:"address"`
+	NFTAddress       string `json:"nftAddress"`
+}
+
 type SuppliesVo struct {
 	PageNum     int64     `json:"pageNum"`
 	PageSize    int64     `json:"pageSize"`
@@ -20,15 +41,15 @@ type TokenVo struct {
 	//CreatedTime      string `gorm:"created_time" json:"created_time"`
 	//UpdatedTime      string `gorm:"updated_time" json:"updated_time"`
 	//PoolAddress      string `gorm:"pool_address" json:"pool_address"`
-	TokenId          string      `json:"tokenId"`
-	TokenAddress     string      `json:"tokenAddress"`
-	TokenName        string      `json:"tokenName"`
-	TokenSymbol      string      `json:"tokenSymbol"`
-	TokenUri         interface{} `json:"tokenUri"`
-	Borrower         string      `json:"borrower"`  // 借款人
-	Mortgagor        string      `json:"mortgagor"` // 抵押人
-	Status           int64       `json:"status"`    // token状态初始值为0已被赎回，存入pool为1，借出为-1
-	DelegatorAddress string      `json:"delegatorAddress"`
+	TokenId          string `json:"tokenId"`
+	TokenAddress     string `json:"tokenAddress"`
+	TokenName        string `json:"tokenName"`
+	TokenSymbol      string `json:"tokenSymbol"`
+	TokenUri         string `json:"tokenUri"`
+	Borrower         string `json:"borrower"`  // 借款人
+	Mortgagor        string `json:"mortgagor"` // 抵押人
+	Status           int64  `json:"status"`    // token状态初始值为0已被赎回，存入pool为1，借出为-1
+	DelegatorAddress string `json:"delegatorAddress"`
 }
 
 type PoolListVo struct {

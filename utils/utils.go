@@ -67,7 +67,7 @@ func GetMoralis(address, nft string) *vo.ResponsePageVo {
 			TokenAddress: v.TokenAddress,
 			TokenSymbol:  v.Symbol,
 			TokenName:    v.Name,
-			TokenUri:     v.TokenURI,
+			TokenUri:     v.TokenURI.(string),
 		}
 		tokenVos = append(tokenVos, tokenVo)
 	}

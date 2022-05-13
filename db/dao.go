@@ -149,3 +149,41 @@ func GetPoolTokenByPoolId(id int64) *[]PoolToken {
 	}
 	return &result
 }
+
+func GetToken(req *vo.ReqNFTVo) (*[]vo.TokenVo, int64) {
+	var result []vo.TokenVo
+	var totalSize int64
+	query := config.DB.Table("token").Where("deleted = 0")
+
+	if req.Borrower != "" {
+		query.Where("borrower = ? ", req.Borrower)
+	}
+
+	if req.Mortgagor != "" {
+		query.Where("mortgagor = ? ", req.Mortgagor)
+	}
+
+	if req.PoolAddress != "" {
+		query.Where("pool_address = ?", req.PoolAddress)
+	}
+	if req.Status != "" {
+		query.Where("status = ?", req.Status)
+	}
+	//计算总页数
+	countResult := query.Count(&totalSize)
+	if countResult.Error != nil {
+		log.Error(countResult.Error)
+		return nil, 0
+	}
+
+	res := query.Order("created_time desc").Limit(int(req.PageSize)).Offset(int((req.PageNum - 1) * req.PageSize)).Find(&result)
+	if res.Error != nil {
+		log.Error(res.Error)
+		return nil, 0
+	}
+	return &result, totalSize
+}
+
+func GetWNFTs() {
+
+}

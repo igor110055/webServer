@@ -8,7 +8,6 @@ import (
 	"net/http"
 	"poolServer/config"
 	"poolServer/db"
-	"poolServer/utils"
 	"poolServer/vo"
 	"time"
 )
@@ -16,52 +15,55 @@ import (
 func GetTimeStamp(c *gin.Context) {
 	unix := time.Now().Unix()
 	defer c.Set("req", unix)
-	c.JSON(http.StatusOK, utils.GetResponseVo(config.SUCCESS, config.GetMsg(config.SUCCESS), unix))
+	c.JSON(http.StatusOK, vo.NewResponseVo(config.SUCCESS, unix))
 }
 
 func GetTokenByAddress(c *gin.Context) {
-	address := c.Query("address")
-	nft := c.Query("nft")
-	if address == "" || nft == "" {
-		c.JSON(http.StatusOK, utils.GetResponseVo(config.INVALID_PARAMS, config.GetMsg(config.INVALID_PARAMS), nil))
+	var data vo.MoralisVo
+	reqVo := vo.ReqMoralisVo{}
+	err := c.ShouldBind(&reqVo)
+	if err != nil {
+		c.JSON(http.StatusOK, vo.NewResponseVo(config.INTERNAL_ERROR, nil))
 		return
 	}
-	defer c.Set("req", map[string]interface{}{"address": address, "nft": nft})
-	chainId := "0x61"
-	req, _ := http.NewRequest("GET", "https://deep-index.moralis.io/api/v2/"+address+"/nft/"+nft+"?chain="+
-		chainId, nil)
+	defer c.Set("req", reqVo)
+	req, _ := http.NewRequest("GET", config.MORALIS.Url+reqVo.Address+"/nft/"+reqVo.TokenAddress+"?chain="+
+		config.MORALIS.ChainId+"&cursor="+reqVo.Cursor+"&limit="+reqVo.Limit, nil)
 	// 设置请求头
-	req.Header.Set("X-API-Key", "dXEk5PiV0qmNUHfKeEWdrf9Iu8OpanzXHRi3tLzAxxf9rwShOECim67VeQJdjwbv")
+	req.Header.Set("X-API-Key", config.MORALIS.Key)
 	resp, err := http.DefaultClient.Do(req)
 
 	defer resp.Body.Close()
 	if err != nil {
 		log.Error(err)
-		c.JSON(http.StatusOK, utils.GetResponseVo(config.ERROR, config.GetMsg(config.ERROR), nil))
 		return
 	} else {
 		body, _ := ioutil.ReadAll(resp.Body)
-		//var data interface{}
-		//json.Unmarshal(body, &data)
-		var data vo.MoralisVo
 		json.Unmarshal(body, &data)
-		pageVo := &vo.ResponsePageVo{
-			PageNum:   data.Page,
-			PageSize:  data.PageSize,
-			TotalSize: data.Total,
-			Data:      data.Result,
-		}
-		c.JSON(http.StatusOK, utils.GetResponsePageVo(config.SUCCESS, config.GetMsg(config.SUCCESS), pageVo))
 	}
+
+	//重新组装数据
+	var tokenVos []vo.TokenVo
+	for _, v := range data.Result {
+		tokenVo := vo.TokenVo{
+			TokenId:      v.TokenId,
+			TokenAddress: v.TokenAddress,
+			TokenSymbol:  v.Symbol,
+			TokenName:    v.Name,
+			TokenUri:     v.TokenURI.(string),
+		}
+		tokenVos = append(tokenVos, tokenVo)
+	}
+	c.JSON(http.StatusOK, vo.NewResponsePageVo(data.Page, data.PageSize, data.Total, config.SUCCESS, tokenVos))
 }
 
 func GetPictures(c *gin.Context) {
 	t := c.Query("type")
 	if t == "" {
-		c.JSON(http.StatusOK, utils.GetResponseVo(config.INVALID_PARAMS, config.GetMsg(config.INVALID_PARAMS), nil))
+		c.JSON(http.StatusOK, vo.NewResponseVo(config.INTERNAL_ERROR, nil))
 		return
 	}
 	defer c.Set("req", map[string]interface{}{"type": t})
 	result := db.GetPictures(t)
-	c.JSON(http.StatusOK, utils.GetResponseVo(config.SUCCESS, config.GetMsg(config.SUCCESS), result))
+	c.JSON(http.StatusOK, vo.NewResponseVo(config.SUCCESS, result))
 }

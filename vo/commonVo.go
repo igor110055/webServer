@@ -2,6 +2,13 @@ package vo
 
 import "poolServer/config"
 
+type ReqMoralisVo struct {
+	Address      string `json:"address"`
+	TokenAddress string `json:"tokenAddress"`
+	Cursor       string `json:"cursor"`
+	Limit        string `json:"limit"`
+}
+
 type ReqVo struct {
 	PageVo           `json:"pageVo"`
 	Id               string `json:"id"`

@@ -91,7 +91,7 @@ func GetPoolList(c *gin.Context) {
 }
 
 func GetNFTs(c *gin.Context) {
-	reqVo := vo.ReqVo{}
+	reqVo := vo.ReqNFTVo{}
 	err := c.ShouldBind(&reqVo)
 	if err != nil {
 		c.JSON(http.StatusOK, vo.NewResponseVo(config.INVALID_PARAMS, nil))
@@ -107,4 +107,8 @@ func GetNFTs(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, result)
+}
+
+func GetWNFTs(c *gin.Context) {
+
 }
