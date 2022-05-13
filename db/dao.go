@@ -57,7 +57,7 @@ func GetDepositList(account string, pageNum, pageSize int64) (*[]vo.PoolListVo, 
 	return &result, totalSize
 }
 
-func GetBorrowsList(account string, pageSize, pageNum int64) (*[]vo.PoolListVo, int64) {
+func GetBorrowsList(account string, pageNum, pageSize int64) (*[]vo.PoolListVo, int64) {
 	var result []vo.PoolListVo
 	var totalSize int64
 	res := config.DB.
@@ -98,12 +98,14 @@ func GetBorrowsList(account string, pageSize, pageNum int64) (*[]vo.PoolListVo, 
 	return &result, totalSize
 }
 
-func GetPoolList(pageSize, pageNum int64) (*[]Pool, int64) {
+//TODO 按照首字母排序
+func GetPoolList(pageNum, pageSize int64) (*[]Pool, int64) {
 	var result []Pool
 	var totalSize int64
 	res := config.DB.
 		Table("pool").
 		Where("deleted = 0").
+		Order("created_time desc").
 		Limit(int(pageSize)).Offset(int((pageNum - 1) * pageSize)).
 		Find(&result)
 	if res.Error != nil {

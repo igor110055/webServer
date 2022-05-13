@@ -10,7 +10,6 @@ import (
 	"poolServer/db"
 	"poolServer/utils"
 	"poolServer/vo"
-	"strings"
 	"time"
 )
 
@@ -46,17 +45,6 @@ func GetTokenByAddress(c *gin.Context) {
 		//json.Unmarshal(body, &data)
 		var data vo.MoralisVo
 		json.Unmarshal(body, &data)
-
-		//临时处理主网显示Badge改为Warrior
-		if data.Total > 0 {
-			for _, s := range data.Result {
-				if strings.EqualFold(s.TokenAddress, "0x27a9ffd030bf756965ce2a054d808435d2c61e2e") {
-					s.Name = "Warrior"
-					s.Symbol = "Warrior"
-					s.TokenURI = "https://cloudflare-ipfs.com/ipfs/bafybeihaxnzvymml2ftjgdcfl4khey6owkfryhogunqfyuq4aqsaf5qhzy"
-				}
-			}
-		}
 		pageVo := &vo.ResponsePageVo{
 			PageNum:   data.Page,
 			PageSize:  data.PageSize,

@@ -17,6 +17,7 @@ func GetDepositList(c *gin.Context) {
 		c.JSON(http.StatusOK, vo.NewResponseVo(config.INVALID_PARAMS, nil))
 		return
 	}
+	//记录日志
 	defer c.Set("req", reqVo)
 	result := service.GetDepositListService(&reqVo)
 	if result == nil {
@@ -34,7 +35,9 @@ func GetBorrowsList(c *gin.Context) {
 		c.JSON(http.StatusOK, vo.NewResponseVo(config.INVALID_PARAMS, nil))
 		return
 	}
+	//记录日志
 	defer c.Set("req", reqVo)
+
 	result := service.GetBorrowsListService(&reqVo)
 	if result == nil {
 		c.JSON(http.StatusOK, vo.NewResponseVo(config.INTERNAL_ERROR, nil))
@@ -50,8 +53,10 @@ func GetPoolDetail(c *gin.Context) {
 		c.JSON(http.StatusOK, vo.NewResponseVo(config.INVALID_PARAMS, nil))
 		return
 	}
+	//记录日志
 	defer c.Set("req", id)
 
+	//string =>int64
 	idInt64, err := strconv.ParseInt(id, 10, 64)
 	if err != nil {
 		log.Error(err)
@@ -73,8 +78,15 @@ func GetPoolList(c *gin.Context) {
 		c.JSON(http.StatusOK, vo.NewResponseVo(config.INVALID_PARAMS, nil))
 		return
 	}
+	//记录日志
 	defer c.Set("req", reqVo)
-	result := service.GetBorrowsListService(&reqVo)
+
+	result := service.GetPoolListService(&reqVo)
+	if result == nil {
+		c.JSON(http.StatusOK, vo.NewResponseVo(config.INTERNAL_ERROR, nil))
+		return
+	}
+
 	c.JSON(http.StatusOK, result)
 }
 
@@ -85,7 +97,14 @@ func GetNFTs(c *gin.Context) {
 		c.JSON(http.StatusOK, vo.NewResponseVo(config.INVALID_PARAMS, nil))
 		return
 	}
+	//记录日志
 	defer c.Set("req", reqVo)
+
 	result := service.GetBorrowsListService(&reqVo)
+	if result == nil {
+		c.JSON(http.StatusOK, vo.NewResponseVo(config.INTERNAL_ERROR, nil))
+		return
+	}
+
 	c.JSON(http.StatusOK, result)
 }

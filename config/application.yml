@@ -14,5 +14,9 @@ database:
 #  node0: "https://data-seed-prebsc-2-s2.binance.org:8545/"
 
 node: "https://data-seed-prebsc-2-s2.binance.org:8545/"
+moralis:
+  url: ""
+  chainId: ""
+  key: ""
 
 controllerAddress: "11111111"

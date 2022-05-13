@@ -21,11 +21,18 @@ var (
 	DB                 *gorm.DB
 	CLIENT             *ethclient.Client
 	ControllerContract controller
+	MORALIS            *Moralis
 )
 
 type controller struct {
 	Address common.Address
 	Abi     abi.ABI
+}
+
+type Moralis struct {
+	Url     string
+	Key     string
+	ChainId string
 }
 
 func init() {
@@ -49,10 +56,12 @@ func initAppConfig() *viper.Viper {
 		log.Infoln("config change")
 		initDB(appViper)
 		initClient(appViper)
+		initMoralis(appViper)
 	})
 	//初始化
 	initDB(appViper)
 	initClient(appViper)
+	initMoralis(appViper)
 	return appViper
 }
 
@@ -97,6 +106,13 @@ func initClient(viper *viper.Viper) {
 
 	log.Infoln("connect client success")
 	CLIENT = client
+}
+
+func initMoralis(viper *viper.Viper) {
+	url := viper.GetString("moralis.url")
+	chainId := viper.GetString("moralis.chainId")
+	key := viper.GetString("moralis.key")
+	MORALIS = &Moralis{Url: url, ChainId: chainId, Key: key}
 }
 
 //gorm 打印sql回调方法

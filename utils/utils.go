@@ -1,6 +1,11 @@
 package utils
 
 import (
+	"encoding/json"
+	log "github.com/sirupsen/logrus"
+	"io/ioutil"
+	"net/http"
+	"poolServer/config"
 	"poolServer/vo"
 
 	"time"
@@ -35,4 +40,23 @@ func TimeStampToTime(tm int64) time.Time {
 	timeFormat := time.Unix(tm, 0).Format("2006-01-02 15:04:05")
 	duration, _ := time.ParseInLocation("2006-01-02 15:04:05", timeFormat, time.Local)
 	return duration
+}
+
+func GetMoralis(address, nft string) *vo.MoralisVo {
+	var data vo.MoralisVo
+	req, _ := http.NewRequest("GET", config.MORALIS.Url+address+"/nft/"+nft+"?chain="+
+		config.MORALIS.ChainId, nil)
+	// 设置请求头
+	req.Header.Set("X-API-Key", config.MORALIS.Key)
+	resp, err := http.DefaultClient.Do(req)
+
+	defer resp.Body.Close()
+	if err != nil {
+		log.Error(err)
+		return nil
+	} else {
+		body, _ := ioutil.ReadAll(resp.Body)
+		json.Unmarshal(body, &data)
+	}
+	return &data
 }

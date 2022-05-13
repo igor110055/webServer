@@ -15,6 +15,21 @@ func GetDepositListService(req *vo.ReqVo) *vo.ResponsePageVo {
 }
 
 func GetBorrowsListService(req *vo.ReqVo) *vo.ResponsePageVo {
+
+	switch req.Type {
+
+	case "1":
+		//要查moerios接口的 wallet
+		break
+	case "2":
+		//deposited 我质押进去的 查token表 字段mortgagor
+		//myWNFT 转换出来的专门查wnft表
+		//amount 借nft 查token表 字段pool_address status=1
+		//repay set delegator归还nft 查token表 字段borrower = account status=-1 pool_address
+		break
+
+	}
+
 	res, totalSize := db.GetBorrowsList(req.Address, req.PageVo.PageNum, req.PageVo.PageSize)
 	if res == nil && totalSize == 0 {
 		return nil
@@ -23,7 +38,10 @@ func GetBorrowsListService(req *vo.ReqVo) *vo.ResponsePageVo {
 }
 
 func GetPoolListService(req *vo.ReqVo) *vo.ResponsePageVo {
-	res, totalSize := db.GetBorrowsList(req.Address, req.PageVo.PageNum, req.PageVo.PageSize)
+	res, totalSize := db.GetPoolList(req.PageVo.PageNum, req.PageVo.PageSize)
+	if res == nil && totalSize == 0 {
+		return nil
+	}
 	return vo.NewResponsePageVo(req.PageVo.PageNum, req.PageVo.PageSize, totalSize, config.SUCCESS, res)
 }
 
