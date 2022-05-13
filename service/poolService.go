@@ -62,3 +62,14 @@ func GetNFTs(req *vo.ReqNFTVo) *vo.ResponsePageVo {
 	}
 	return vo.NewResponsePageVo(req.PageVo.PageNum, req.PageVo.PageSize, totalSize, config.SUCCESS, tokens)
 }
+
+func GetWNFTs(req *vo.ReqWNFTVo) *vo.ResponsePageVo {
+	//deposited 我质押进去的 查token表 入参poolAddress mortgagor
+	//amount 我可以借的nft 查token表 字段poolAddress status=1
+	//repay set delegator归还nft 查token表 字段borrower poolAddress
+	tokens, totalSize := db.GetWNFTs(req)
+	if tokens == nil && totalSize == 0 {
+		return nil
+	}
+	return vo.NewResponsePageVo(req.PageVo.PageNum, req.PageVo.PageSize, totalSize, config.SUCCESS, tokens)
+}

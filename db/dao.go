@@ -184,6 +184,30 @@ func GetToken(req *vo.ReqNFTVo) (*[]vo.TokenVo, int64) {
 	return &result, totalSize
 }
 
-func GetWNFTs() {
+func GetWNFTs(req *vo.ReqWNFTVo) (*[]vo.TokenVo, int64) {
+	var result []vo.TokenVo
+	var totalSize int64
 
+	query := config.DB.Table("token").Where("deleted = 0")
+
+	if req.Account != "" {
+		query.Where("owner = ?", req.Account)
+	}
+	if req.Account != "" {
+		query.Where("token_address = ?", req.Address)
+	}
+
+	//计算总页数
+	countResult := query.Count(&totalSize)
+	if countResult.Error != nil {
+		log.Error(countResult.Error)
+		return nil, 0
+	}
+
+	res := query.Order("updated_time desc").Limit(int(req.PageSize)).Offset(int((req.PageNum - 1) * req.PageSize)).Find(&result)
+	if res.Error != nil {
+		log.Error(res.Error)
+		return nil, 0
+	}
+	return &result, totalSize
 }

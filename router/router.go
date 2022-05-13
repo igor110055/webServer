@@ -36,7 +36,6 @@ func commonRouter(r *gin.RouterGroup) {
 }
 
 func poolRouter(r *gin.RouterGroup) {
-
 	r.POST("/getDepositList", GetDepositList)
 	r.POST("/getBorrowsList", GetBorrowsList)
 

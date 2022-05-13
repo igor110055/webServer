@@ -22,6 +22,11 @@ type ReqNFTVo struct {
 	Address          string `json:"address"`
 	NFTAddress       string `json:"nftAddress"`
 }
+type ReqWNFTVo struct {
+	PageVo  `json:"pageVo"`
+	Address string `json:"address"`
+	Account string `json:"account"`
+}
 
 type SuppliesVo struct {
 	PageNum     int64     `json:"pageNum"`
@@ -50,6 +55,8 @@ type TokenVo struct {
 	Mortgagor        string `json:"mortgagor"` // 抵押人
 	Status           int64  `json:"status"`    // token状态初始值为0已被赎回，存入pool为1，借出为-1
 	DelegatorAddress string `json:"delegatorAddress"`
+	From             string `json:"from"`
+	To               string `json:"to"`
 }
 
 type PoolListVo struct {

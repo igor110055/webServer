@@ -110,5 +110,20 @@ func GetNFTs(c *gin.Context) {
 }
 
 func GetWNFTs(c *gin.Context) {
+	reqVo := vo.ReqWNFTVo{}
+	err := c.ShouldBind(&reqVo)
+	if err != nil {
+		c.JSON(http.StatusOK, vo.NewResponseVo(config.INVALID_PARAMS, nil))
+		return
+	}
+	//记录日志
+	defer c.Set("req", reqVo)
 
+	result := service.GetWNFTs(&reqVo)
+	if result == nil {
+		c.JSON(http.StatusOK, vo.NewResponseVo(config.INTERNAL_ERROR, nil))
+		return
+	}
+
+	c.JSON(http.StatusOK, result)
 }
