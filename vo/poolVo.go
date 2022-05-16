@@ -11,6 +11,11 @@ type ReqPoolVo struct {
 	Mortgagor        string `json:"mortgagor"` // 抵押人
 }
 
+func InitReqPoolVo() *ReqPoolVo {
+	vo := NewPageVo()
+	return &ReqPoolVo{PageVo: *vo}
+}
+
 type ReqNFTVo struct {
 	PageVo           `json:"pageVo"`
 	TokenId          string `json:"tokenId"`
@@ -22,10 +27,21 @@ type ReqNFTVo struct {
 	Address          string `json:"address"`
 	NFTAddress       string `json:"nftAddress"`
 }
+
+func InitReqNFTVo() *ReqNFTVo {
+	vo := NewPageVo()
+	return &ReqNFTVo{PageVo: *vo}
+}
+
 type ReqWNFTVo struct {
 	PageVo  `json:"pageVo"`
 	Address string `json:"address"`
 	Account string `json:"account"`
+}
+
+func InitReqWNFTVo() *ReqWNFTVo {
+	vo := NewPageVo()
+	return &ReqWNFTVo{PageVo: *vo}
 }
 
 type SuppliesVo struct {

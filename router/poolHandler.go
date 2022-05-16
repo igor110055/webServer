@@ -11,7 +11,7 @@ import (
 )
 
 func GetDepositList(c *gin.Context) {
-	reqVo := vo.ReqVo{}
+	reqVo := vo.InitReqPoolVo()
 	err := c.ShouldBind(&reqVo)
 	if err != nil {
 		c.JSON(http.StatusOK, vo.NewResponseVo(config.INVALID_PARAMS, nil))
@@ -19,7 +19,7 @@ func GetDepositList(c *gin.Context) {
 	}
 	//记录日志
 	defer c.Set("req", reqVo)
-	result := service.GetDepositListService(&reqVo)
+	result := service.GetDepositListService(reqVo)
 	if result == nil {
 		c.JSON(http.StatusOK, vo.NewResponseVo(config.INTERNAL_ERROR, nil))
 		return
@@ -29,7 +29,7 @@ func GetDepositList(c *gin.Context) {
 }
 
 func GetBorrowsList(c *gin.Context) {
-	reqVo := vo.ReqVo{}
+	reqVo := vo.InitReqPoolVo()
 	err := c.ShouldBind(&reqVo)
 	if err != nil {
 		c.JSON(http.StatusOK, vo.NewResponseVo(config.INVALID_PARAMS, nil))
@@ -38,7 +38,7 @@ func GetBorrowsList(c *gin.Context) {
 	//记录日志
 	defer c.Set("req", reqVo)
 
-	result := service.GetBorrowsListService(&reqVo)
+	result := service.GetBorrowsListService(reqVo)
 	if result == nil {
 		c.JSON(http.StatusOK, vo.NewResponseVo(config.INTERNAL_ERROR, nil))
 		return
@@ -72,7 +72,7 @@ func GetPoolDetail(c *gin.Context) {
 }
 
 func GetPoolList(c *gin.Context) {
-	reqVo := vo.ReqVo{}
+	reqVo := vo.InitReqVo()
 	err := c.ShouldBind(&reqVo)
 	if err != nil {
 		c.JSON(http.StatusOK, vo.NewResponseVo(config.INVALID_PARAMS, nil))
@@ -81,7 +81,7 @@ func GetPoolList(c *gin.Context) {
 	//记录日志
 	defer c.Set("req", reqVo)
 
-	result := service.GetPoolListService(&reqVo)
+	result := service.GetPoolListService(reqVo)
 	if result == nil {
 		c.JSON(http.StatusOK, vo.NewResponseVo(config.INTERNAL_ERROR, nil))
 		return
@@ -91,7 +91,7 @@ func GetPoolList(c *gin.Context) {
 }
 
 func GetNFTs(c *gin.Context) {
-	reqVo := vo.ReqNFTVo{}
+	reqVo := vo.InitReqNFTVo()
 	err := c.ShouldBind(&reqVo)
 	if err != nil {
 		c.JSON(http.StatusOK, vo.NewResponseVo(config.INVALID_PARAMS, nil))
@@ -100,7 +100,7 @@ func GetNFTs(c *gin.Context) {
 	//记录日志
 	defer c.Set("req", reqVo)
 
-	result := service.GetNFTs(&reqVo)
+	result := service.GetNFTs(reqVo)
 	if result == nil {
 		c.JSON(http.StatusOK, vo.NewResponseVo(config.INTERNAL_ERROR, nil))
 		return
@@ -110,7 +110,7 @@ func GetNFTs(c *gin.Context) {
 }
 
 func GetWNFTs(c *gin.Context) {
-	reqVo := vo.ReqWNFTVo{}
+	reqVo := vo.InitReqWNFTVo()
 	err := c.ShouldBind(&reqVo)
 	if err != nil {
 		c.JSON(http.StatusOK, vo.NewResponseVo(config.INVALID_PARAMS, nil))
@@ -119,7 +119,7 @@ func GetWNFTs(c *gin.Context) {
 	//记录日志
 	defer c.Set("req", reqVo)
 
-	result := service.GetWNFTs(&reqVo)
+	result := service.GetWNFTs(reqVo)
 	if result == nil {
 		c.JSON(http.StatusOK, vo.NewResponseVo(config.INTERNAL_ERROR, nil))
 		return

@@ -19,10 +19,19 @@ type ReqVo struct {
 	Type             string `json:"type"`
 }
 
+func InitReqVo() *ReqVo {
+	vo := NewPageVo()
+	return &ReqVo{PageVo: *vo}
+}
+
 type PageVo struct {
 	PageNum   int64 `json:"pageNum"`
 	PageSize  int64 `json:"pageSize"`
 	TotalSize int64 `json:"totalSize"`
+}
+
+func NewPageVo() *PageVo {
+	return &PageVo{PageNum: 1, PageSize: 10}
 }
 
 type ResponsePageVo struct {
