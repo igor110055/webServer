@@ -58,10 +58,7 @@ type SuppliesVo struct {
 }
 
 type TokenVo struct {
-	Id int64 ` json:"id"`
-	//CreatedTime      string `gorm:"created_time" json:"created_time"`
-	//UpdatedTime      string `gorm:"updated_time" json:"updated_time"`
-	//PoolAddress      string `gorm:"pool_address" json:"pool_address"`
+	Id               int64  ` json:"id"`
 	TokenId          string `json:"tokenId"`
 	TokenAddress     string `json:"tokenAddress"`
 	TokenName        string `json:"tokenName"`
@@ -71,8 +68,6 @@ type TokenVo struct {
 	Mortgagor        string `json:"mortgagor"` // 抵押人
 	Status           int64  `json:"status"`    // token状态初始值为0已被赎回，存入pool为1，借出为-1
 	DelegatorAddress string `json:"delegatorAddress"`
-	From             string `json:"from"`
-	To               string `json:"to"`
 }
 
 type PoolListVo struct {
@@ -83,8 +78,6 @@ type PoolListVo struct {
 	Name                string    `json:"name"`
 	Url                 string    `json:"url"`
 	Owner               string    `json:"owner"`
-	TokenAddress        string    `json:"tokenAddress"`
-	TokenName           string    `json:"tokenName"`
 	RewardsTokenName    string    `json:"rewardsTokenName"`
 	RewardsTokenAddress string    `json:"rewardsTokenAddress"`
 	Apr                 string    `json:"apr"`
@@ -107,13 +100,14 @@ type PoolDetailVo struct {
 	TokenName           string    `json:"tokenName"`
 	RewardsTokenName    string    `json:"rewardsTokenName"`
 	RewardsTokenAddress string    `json:"rewardsTokenAddress"`
-	BaseRate            string    `json:"baseRate"`
-	InterestFactor      string    `json:"interestFactor"`
-	KinkRate            string    `json:"kinkRate"`
-	JumpMultiplier      string    `json:"jumpMultiplier"`
-	EffectiveTime       string    `json:"effectiveTime"`
-	NewBaseRate         string    `json:"newBaseRate"`
-	NewInterestFactor   string    `json:"newInterestFactor"`
-	NewKinkRate         string    `json:"newKinkRate"`
-	NewJumpMultiplier   string    `json:"newJumpMultiplier"`
+	EffectiveTime       string    `json:"effective_time"` // 生效时间
+	Rate                Rate      `json:"rate"`           // 基础利率值
+	NewRate             Rate      `json:"new_rate"`       // 新基础利率值
+}
+
+type Rate struct {
+	BaseRate       string `json:"baseRate"`
+	InterestFactor string `json:"interestFactor"`
+	KinkRate       string `json:"kinkRate"`
+	JumpMultiplier string `json:"jumpMultiplier"`
 }

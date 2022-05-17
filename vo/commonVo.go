@@ -9,6 +9,21 @@ type ReqMoralisVo struct {
 	Limit        string `json:"limit"`
 }
 
+func InitReqMoralisVo() *ReqMoralisVo {
+	return &ReqMoralisVo{Cursor: "", Limit: "10"}
+}
+
+type MoralisResVo struct {
+	Cursor string  `json:"cursor"`
+	Tokens []Token `json:"tokens"`
+}
+type Token struct {
+	TokenId      string `json:"tokenId"`
+	TokenAddress string `json:"tokenAddress"`
+	TokenName    string `json:"tokenName"`
+	TokenSymbol  string `json:"tokenSymbol"`
+	TokenUri     string `json:"tokenUri"`
+}
 type ReqVo struct {
 	PageVo           `json:"pageVo"`
 	Id               string `json:"id"`
@@ -63,21 +78,21 @@ type MoralisVo struct {
 	PageSize int64  `json:"page_size"`
 	Cursor   string `json:"cursor"`
 	Result   []struct {
-		TokenAddress      string      `json:"token_address"`
-		TokenId           string      `json:"token_id"`
-		BlockNumberMinted string      `json:"block_number_minted"`
-		OwnerOf           string      `json:"owner_of"`
-		BlockNumber       string      `json:"block_number"`
-		Amount            string      `json:"amount"`
-		ContractType      string      `json:"contract_type"`
-		Name              string      `json:"name"`
-		Symbol            string      `json:"symbol"`
-		TokenURI          interface{} `json:"token_uri"`
-		Metadata          interface{} `json:"metadata"`
-		SyncedAt          interface{} `json:"synced_at"`
-		IsValid           int64       `json:"is_valid"`
-		Syncing           int64       `json:"syncing"`
-		Frozen            int64       `json:"frozen"`
+		TokenAddress      string `json:"token_address"`
+		TokenId           string `json:"token_id"`
+		BlockNumberMinted string `json:"block_number_minted"`
+		OwnerOf           string `json:"owner_of"`
+		BlockNumber       string `json:"block_number"`
+		Amount            string `json:"amount"`
+		ContractType      string `json:"contract_type"`
+		Name              string `json:"name"`
+		Symbol            string `json:"symbol"`
+		TokenURI          string `json:"token_uri"`
+		Metadata          string `json:"metadata"`
+		SyncedAt          string `json:"synced_at"`
+		IsValid           int64  `json:"is_valid"`
+		Syncing           int64  `json:"syncing"`
+		Frozen            int64  `json:"frozen"`
 	} `json:"result"`
 	Status string `json:"status"`
 }

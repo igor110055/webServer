@@ -20,7 +20,7 @@ func GetTimeStamp(c *gin.Context) {
 
 func GetTokenByAddress(c *gin.Context) {
 	var data vo.MoralisVo
-	reqVo := vo.ReqMoralisVo{}
+	reqVo := vo.InitReqMoralisVo()
 	err := c.ShouldBind(&reqVo)
 	if err != nil {
 		c.JSON(http.StatusOK, vo.NewResponseVo(config.INTERNAL_ERROR, nil))
@@ -43,18 +43,20 @@ func GetTokenByAddress(c *gin.Context) {
 	}
 
 	//重新组装数据
-	var tokenVos []vo.TokenVo
+	var res vo.MoralisResVo
+	res.Cursor = data.Cursor
 	for _, v := range data.Result {
-		tokenVo := vo.TokenVo{
+		token := vo.Token{
 			TokenId:      v.TokenId,
 			TokenAddress: v.TokenAddress,
 			TokenSymbol:  v.Symbol,
 			TokenName:    v.Name,
-			TokenUri:     v.TokenURI.(string),
+			TokenUri:     v.TokenURI,
 		}
-		tokenVos = append(tokenVos, tokenVo)
+		res.Tokens = append(res.Tokens, token)
 	}
-	c.JSON(http.StatusOK, vo.NewResponsePageVo(data.Page, data.PageSize, data.Total, config.SUCCESS, tokenVos))
+
+	c.JSON(http.StatusOK, vo.NewResponsePageVo(data.Page+1, data.PageSize, data.Total, config.SUCCESS, res))
 }
 
 func GetPictures(c *gin.Context) {

@@ -31,7 +31,7 @@ func CollectRoute(r *gin.Engine) {
 
 func commonRouter(r *gin.RouterGroup) {
 	r.GET("/getTimeStamp", GetTimeStamp)
-	r.GET("/getTokenByAddress", GetTokenByAddress)
+	r.POST("/getTokenByAddress", GetTokenByAddress)
 	r.GET("/getPictures", GetPictures)
 }
 

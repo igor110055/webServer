@@ -23,7 +23,8 @@ func GetPoolsByQuery(req *vo.ReqPoolVo) (*[]vo.PoolListVo, int64) {
 		Table("pool p").
 		Select("p.id," +
 			"p.name," +
-			"p.uri," +
+			"p.url," +
+			"p.owner," +
 			"p.address," +
 			"p.created_time," +
 			"p.updated_time," +
@@ -33,9 +34,9 @@ func GetPoolsByQuery(req *vo.ReqPoolVo) (*[]vo.PoolListVo, int64) {
 			"pt.wrapper_address," +
 			"pt.wnft_address," +
 			"t.delegator_address ").
-		Joins("LEFT JOIN pool_token pt ON pt.pool_id = p.id and pt.deleted = 0").
+		Joins("LEFT JOIN pool_token pt ON pt.pool_id = p.id and pt.deleted = 0 and type = 'erc20'").
 		Joins("LEFT JOIN token t ON t.pool_address = p.address and t.deleted = 0").
-		Where("p.deleted = 0")
+		Where("p.deleted = 0").Group("p.address")
 
 	if req.Mortgagor != "" {
 		query.Where("t.mortgagor = ?", req.Mortgagor)
@@ -125,21 +126,22 @@ func GetPoolTokenByPoolId(id int64) *[]PoolToken {
 func GetToken(req *vo.ReqNFTVo) (*[]vo.TokenVo, int64) {
 	var result []vo.TokenVo
 	var totalSize int64
-	query := config.DB.Table("token").Where("deleted = 0")
+	query := config.DB.Table("token t").
+		Select("t.id,"+
+			"t.token_id,t.token_address,t.token_uri,t.borrower,t.mortgagor,t.status,t.delegator_address,pt.token_name").
+		Where("t.deleted = 0 and t.pool_address = ?", req.PoolAddress).
+		Joins("left join pool_token pt on t.token_address = pt.token_address")
 
 	if req.Borrower != "" {
-		query.Where("borrower = ? ", req.Borrower)
+		query.Where("t.borrower = ? ", req.Borrower)
 	}
 
 	if req.Mortgagor != "" {
-		query.Where("mortgagor = ? ", req.Mortgagor)
+		query.Where("t.mortgagor = ? ", req.Mortgagor)
 	}
 
-	if req.PoolAddress != "" {
-		query.Where("pool_address = ?", req.PoolAddress)
-	}
 	if req.Status != "" {
-		query.Where("status = ?", req.Status)
+		query.Where("t.status = ? and t.borrower = '' ", req.Status)
 	}
 	//计算总页数
 	countResult := query.Count(&totalSize)
@@ -148,7 +150,7 @@ func GetToken(req *vo.ReqNFTVo) (*[]vo.TokenVo, int64) {
 		return nil, 0
 	}
 
-	res := query.Order("created_time desc").Limit(int(req.PageSize)).Offset(int((req.PageNum - 1) * req.PageSize)).Find(&result)
+	res := query.Order("t.created_time desc").Limit(int(req.PageSize)).Offset(int((req.PageNum - 1) * req.PageSize)).Find(&result)
 	if res.Error != nil {
 		log.Error(res.Error)
 		return nil, 0
@@ -160,7 +162,7 @@ func GetWNFTs(req *vo.ReqWNFTVo) (*[]vo.TokenVo, int64) {
 	var result []vo.TokenVo
 	var totalSize int64
 
-	query := config.DB.Table("token").Where("deleted = 0")
+	query := config.DB.Table("wnft").Where("deleted = 0")
 
 	if req.Account != "" {
 		query.Where("owner = ?", req.Account)

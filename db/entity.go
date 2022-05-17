@@ -9,7 +9,7 @@ type Pool struct {
 	Deleted       int64  `gorm:"deleted" json:"deleted"`
 	Address       string `gorm:"address" json:"address"` // 合约地址
 	Owner         string `gorm:"owner" json:"owner"`     // 创建账户
-	Uri           string `gorm:"uri" json:"uri"`
+	Url           string `gorm:"url" json:"url"`
 	Name          string `gorm:"name" json:"name"`
 	EffectiveTime string `gorm:"effective_time" json:"effective_time"` // 生效时间
 	Rate          string `gorm:"rate" json:"rate"`                     // 基础利率值
@@ -26,11 +26,9 @@ type PoolToken struct {
 	UpdatedTime    string `gorm:"updated_time" json:"updated_time"`
 	Deleted        int64  `gorm:"deleted" json:"deleted"` // 如果赎回就变为-1
 	PoolId         string `gorm:"pool_id" json:"pool_id"`
-	TokenId        string `gorm:"token_id" json:"token_id"`
 	TokenUri       string `gorm:"token_uri" json:"token_uri"`
 	TokenName      string `gorm:"token_name" json:"token_name"`
 	TokenAddress   string `gorm:"token_address" json:"token_address"`
-	Status         string `gorm:"status" json:"status"` // 0 need/1 rewards
 	WrapperAddress string `gorm:"wrapper_address" json:"wrapper_address"`
 	WNFTAddress    string `gorm:"wnft_address" json:"wnft_address"`
 	Type           string `gorm:"type" json:"type"`
@@ -69,4 +67,21 @@ type Picture struct {
 
 func (Picture) TableName() string {
 	return "picture"
+}
+
+type Wnft struct {
+	Id           int64     `gorm:"id" json:"id"`
+	CreatedTime  time.Time `gorm:"created_time" json:"created_time"`
+	UpdatedTime  time.Time `gorm:"updated_time" json:"updated_time"`
+	Deleted      int64     `gorm:"deleted" json:"deleted"` // 如果赎回就变为-1
+	PoolAddress  string    `gorm:"pool_address" json:"pool_address"`
+	TokenId      string    `gorm:"token_id" json:"token_id"`
+	TokenAddress string    `gorm:"token_address" json:"token_address"`
+	TokenName    string    `gorm:"token_name" json:"token_name"`
+	TokenUri     string    `gorm:"token_uri" json:"token_uri"`
+	Owner        string    `gorm:"owner" json:"owner"`
+}
+
+func (Wnft) TableName() string {
+	return "wnft"
 }

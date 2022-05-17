@@ -41,10 +41,10 @@ func GetPoolDetail(id int64) *vo.ResponseVo {
 	//组装Vo
 	for _, value := range *poolTokens {
 		//0 need 1 rewards
-		if value.Status == "1" {
+		if value.Type == "erc20" {
 			poolDetail.RewardsTokenName = value.TokenName
 			poolDetail.RewardsTokenAddress = value.TokenAddress
-		} else if value.Status == "0" {
+		} else if value.Type == "erc721" {
 			poolDetail.TokenName = value.TokenName
 			poolDetail.TokenAddress = value.TokenAddress
 		}
@@ -64,9 +64,6 @@ func GetNFTs(req *vo.ReqNFTVo) *vo.ResponsePageVo {
 }
 
 func GetWNFTs(req *vo.ReqWNFTVo) *vo.ResponsePageVo {
-	//deposited 我质押进去的 查token表 入参poolAddress mortgagor
-	//amount 我可以借的nft 查token表 字段poolAddress status=1
-	//repay set delegator归还nft 查token表 字段borrower poolAddress
 	tokens, totalSize := db.GetWNFTs(req)
 	if tokens == nil && totalSize == 0 {
 		return nil
