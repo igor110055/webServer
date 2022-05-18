@@ -6,18 +6,18 @@ import (
 	"poolServer/vo"
 )
 
-func GetPictures(t string) *[]Picture {
-	var result []Picture
-	res := config.DB.Table("picture").Where("type = ? and deleted = 0", t).Find(&result)
-	if res.Error != nil {
-		log.Error(res.Error)
-		return nil
-	}
-	return &result
-}
+//func GetPictures(t string) *[]Picture {
+//	var result []Picture
+//	res := config.DB.Table("picture").Where("type = ? and deleted = 0", t).Find(&result)
+//	if res.Error != nil {
+//		log.Error(res.Error)
+//		return nil
+//	}
+//	return &result
+//}
 
-func GetPoolsByQuery(req *vo.ReqPoolVo) (*[]vo.PoolListVo, int64) {
-	var result []vo.PoolListVo
+func GetPoolsByQuery(req *vo.ReqPoolVo) (*[]vo.DepositListVo, int64) {
+	var result []vo.DepositListVo
 	var totalSize int64
 	query := config.DB.
 		Table("pool p").

@@ -7,16 +7,14 @@ import (
 	"io/ioutil"
 	"net/http"
 	"poolServer/config"
-	"poolServer/db"
 	"poolServer/vo"
-	"time"
 )
 
-func GetTimeStamp(c *gin.Context) {
-	unix := time.Now().Unix()
-	defer c.Set("req", unix)
-	c.JSON(http.StatusOK, vo.NewResponseVo(config.SUCCESS, unix))
-}
+//func GetTimeStamp(c *gin.Context) {
+//	unix := time.Now().Unix()
+//	defer c.Set("req", unix)
+//	c.JSON(http.StatusOK, vo.NewResponseVo(config.SUCCESS, unix))
+//}
 
 func GetTokenByAddress(c *gin.Context) {
 	var data vo.MoralisVo
@@ -59,13 +57,13 @@ func GetTokenByAddress(c *gin.Context) {
 	c.JSON(http.StatusOK, vo.NewResponsePageVo(data.Page+1, data.PageSize, data.Total, config.SUCCESS, res))
 }
 
-func GetPictures(c *gin.Context) {
-	t := c.Query("type")
-	if t == "" {
-		c.JSON(http.StatusOK, vo.NewResponseVo(config.INTERNAL_ERROR, nil))
-		return
-	}
-	defer c.Set("req", map[string]interface{}{"type": t})
-	result := db.GetPictures(t)
-	c.JSON(http.StatusOK, vo.NewResponseVo(config.SUCCESS, result))
-}
+//func GetPictures(c *gin.Context) {
+//	t := c.Query("type")
+//	if t == "" {
+//		c.JSON(http.StatusOK, vo.NewResponseVo(config.INTERNAL_ERROR, nil))
+//		return
+//	}
+//	defer c.Set("req", map[string]interface{}{"type": t})
+//	result := db.GetPictures(t)
+//	c.JSON(http.StatusOK, vo.NewResponseVo(config.SUCCESS, result))
+//}

@@ -70,7 +70,7 @@ type TokenVo struct {
 	DelegatorAddress string `json:"delegatorAddress"`
 }
 
-type PoolListVo struct {
+type DepositListVo struct {
 	Id                  int64     `json:"id"`
 	CreatedTime         time.Time `json:"createdTime"`
 	UpdatedTime         time.Time `json:"updatedTime"`
@@ -80,12 +80,12 @@ type PoolListVo struct {
 	Owner               string    `json:"owner"`
 	RewardsTokenName    string    `json:"rewardsTokenName"`
 	RewardsTokenAddress string    `json:"rewardsTokenAddress"`
-	Apr                 string    `json:"apr"`
-	BorrowAPR           string    `json:"borrowAPR"`
-	Type                string    `json:"type"`
-	WrapperAddress      string    `json:"wrapperAddress"`
-	WNFTtAddress        string    `json:"wnftAddress"`
-	DelegatorAddress    string    `json:"delegatorAddress"`
+	//Apr                 string    `json:"apr"`
+	//BorrowAPR           string    `json:"borrowAPR"`
+	Type string `json:"type"`
+	//WrapperAddress      string    `json:"wrapperAddress"`
+	//WNFTtAddress        string    `json:"wnftAddress"`
+	//DelegatorAddress    string    `json:"delegatorAddress"`
 }
 
 type PoolDetailVo struct {
@@ -101,13 +101,13 @@ type PoolDetailVo struct {
 	RewardsTokenName    string    `json:"rewardsTokenName"`
 	RewardsTokenAddress string    `json:"rewardsTokenAddress"`
 	EffectiveTime       string    `json:"effective_time"` // 生效时间
-	Rate                Rate      `json:"rate"`           // 基础利率值
-	NewRate             Rate      `json:"new_rate"`       // 新基础利率值
+	Rate                RateModel `json:"rate"`           // 基础利率值
+	NewRate             RateModel `json:"new_rate"`       // 新基础利率值
 }
 
-type Rate struct {
-	BaseRate       string `json:"baseRate"`
-	InterestFactor string `json:"interestFactor"`
-	KinkRate       string `json:"kinkRate"`
-	JumpMultiplier string `json:"jumpMultiplier"`
+type RateModel struct {
+	MultiplierPer     string `json:"multiplierPer"`
+	BaseRatePer       string `json:"BaseRatePer"`
+	JumpMultiplierPer string `json:"JumpMultiplierPer"`
+	Kink              string `json:"kink"`
 }
