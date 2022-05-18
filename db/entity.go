@@ -89,3 +89,17 @@ type Wnft struct {
 func (Wnft) TableName() string {
 	return "wnft"
 }
+
+type PoolListDto struct {
+	Id           int64     `json:"id"`
+	CreatedTime  time.Time `json:"createdTime"`
+	UpdatedTime  time.Time `json:"updatedTime"`
+	Address      string    `json:"address"`
+	Name         string    `json:"name"`
+	Url          string    `json:"url"`
+	Owner        string    `json:"owner"`
+	TokenName    string    `json:"tokenName"`
+	TokenAddress string    `json:"tokenAddress"`
+	Rate         string    `json:"rate"`
+	Type         string    `json:"type"`
+}

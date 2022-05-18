@@ -72,12 +72,24 @@ func GetPoolsByQuery(req *vo.ReqPoolVo) (*[]vo.DepositListVo, int64) {
 }
 
 //TODO 按照首字母排序
-func GetPoolList(pageNum, pageSize int64) (*[]Pool, int64) {
-	var result []Pool
+func GetPoolList(pageNum, pageSize int64) (*[]PoolListDto, int64) {
+	var result []PoolListDto
 	var totalSize int64
 	query := config.DB.
-		Table("pool").
-		Where("deleted = 0")
+		Table("pool p").
+		Select("p.id," +
+			"p.name," +
+			"p.url," +
+			"p.owner," +
+			"p.address," +
+			"p.rate," +
+			"p.created_time," +
+			"p.updated_time," +
+			"pt.token_name," +
+			"pt.token_address," +
+			"pt.type").
+		Joins("LEFT JOIN pool_token pt ON pt.pool_id = p.id and pt.deleted = 0 and type = 'erc721'").
+		Where("p.deleted = 0").Group("p.address")
 
 	//计算总页数
 	countResult := query.Count(&totalSize)
@@ -184,4 +196,22 @@ func GetWNFTs(req *vo.ReqWNFTVo) (*[]vo.TokenVo, int64) {
 		return nil, 0
 	}
 	return &result, totalSize
+}
+
+func GetTotalBorrower(poolAddress string) (int64, int64) {
+	var total, borrowers int64
+	b := config.DB.Table("token").Where("deleted = 0 and status = -1 and pool_address = ?", poolAddress).
+		Count(&borrowers)
+
+	if b.Error != nil {
+		log.Error(b.Error)
+	}
+
+	t := config.DB.Table("token").Where("deleted = 0 and status = 1 and pool_address = ?", poolAddress).
+		Count(&total)
+
+	if t.Error != nil {
+		log.Error(b.Error)
+	}
+	return borrowers, total
 }

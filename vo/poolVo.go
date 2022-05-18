@@ -80,12 +80,22 @@ type DepositListVo struct {
 	Owner               string    `json:"owner"`
 	RewardsTokenName    string    `json:"rewardsTokenName"`
 	RewardsTokenAddress string    `json:"rewardsTokenAddress"`
-	//Apr                 string    `json:"apr"`
-	//BorrowAPR           string    `json:"borrowAPR"`
-	Type string `json:"type"`
-	//WrapperAddress      string    `json:"wrapperAddress"`
-	//WNFTtAddress        string    `json:"wnftAddress"`
-	//DelegatorAddress    string    `json:"delegatorAddress"`
+	Type                string    `json:"type"`
+}
+
+type PoolListVo struct {
+	Id           int64     `json:"id"`
+	CreatedTime  time.Time `json:"createdTime"`
+	UpdatedTime  time.Time `json:"updatedTime"`
+	Address      string    `json:"address"`
+	Name         string    `json:"name"`
+	Url          string    `json:"url"`
+	Owner        string    `json:"owner"`
+	TokenName    string    `json:"tokenName"`
+	TokenAddress string    `json:"tokenAddress"`
+	Type         string    `json:"type"`
+	Apr          float64   `json:"apr"`
+	BorrowAPR    float64   `json:"borrowAPR"`
 }
 
 type PoolDetailVo struct {
@@ -106,8 +116,8 @@ type PoolDetailVo struct {
 }
 
 type RateModel struct {
-	MultiplierPer     string `json:"multiplierPer"`
-	BaseRatePer       string `json:"BaseRatePer"`
-	JumpMultiplierPer string `json:"JumpMultiplierPer"`
-	Kink              string `json:"kink"`
+	Multiplier     float64 `json:"multiplier"`
+	BaseRate       float64 `json:"baseRate"`
+	JumpMultiplier float64 `json:"jumpMultiplier"`
+	Kink           float64 `json:"kink"`
 }

@@ -3,6 +3,7 @@ package service
 import (
 	"poolServer/config"
 	"poolServer/db"
+	"poolServer/utils"
 	"poolServer/vo"
 )
 
@@ -23,9 +24,16 @@ func GetBorrowsListService(req *vo.ReqPoolVo) *vo.ResponsePageVo {
 }
 
 func GetPoolListService(req *vo.ReqVo) *vo.ResponsePageVo {
-	res, totalSize := db.GetPoolList(req.PageVo.PageNum, req.PageVo.PageSize)
-	if res == nil && totalSize == 0 {
+	poolDtos, totalSize := db.GetPoolList(req.PageVo.PageNum, req.PageVo.PageSize)
+	if poolDtos == nil && totalSize == 0 {
 		return nil
+	}
+
+	var res []*vo.PoolListVo
+	//封装数据，计算apr
+	for _, listVo := range *poolDtos {
+		poolListVo := utils.TransferPoolListVo(listVo)
+		res = append(res, poolListVo)
 	}
 	return vo.NewResponsePageVo(req.PageVo.PageNum, req.PageVo.PageSize, totalSize, config.SUCCESS, res)
 }
