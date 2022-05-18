@@ -40,24 +40,10 @@ func GetPoolListService(req *vo.ReqVo) *vo.ResponsePageVo {
 
 func GetPoolDetail(id int64) *vo.ResponseVo {
 	poolDetail := db.GetPoolById(id)
-	poolTokens := db.GetPoolTokenByPoolId(id)
 
-	if poolDetail == nil || poolTokens == nil {
-		return nil
-	}
+	res := utils.TransferPoolDetailVo(poolDetail)
 
-	//组装Vo
-	for _, value := range *poolTokens {
-		//0 need 1 rewards
-		if value.Type == "erc20" {
-			poolDetail.RewardsTokenName = value.TokenName
-			poolDetail.RewardsTokenAddress = value.TokenAddress
-		} else if value.Type == "erc721" {
-			poolDetail.TokenName = value.TokenName
-			poolDetail.TokenAddress = value.TokenAddress
-		}
-	}
-	return vo.NewResponseVo(config.SUCCESS, poolDetail)
+	return vo.NewResponseVo(config.SUCCESS, res)
 }
 
 func GetNFTs(req *vo.ReqNFTVo) *vo.ResponsePageVo {

@@ -109,8 +109,8 @@ func GetPoolList(pageNum, pageSize int64) (*[]PoolListDto, int64) {
 	return &result, totalSize
 }
 
-func GetPoolById(id int64) *vo.PoolDetailVo {
-	var result vo.PoolDetailVo
+func GetPoolById(id int64) *Pool {
+	var result Pool
 	res := config.DB.
 		Table("pool").
 		Where("deleted = 0 and id = ?", id).

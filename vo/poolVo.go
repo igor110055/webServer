@@ -99,7 +99,7 @@ type PoolListVo struct {
 }
 
 type PoolDetailVo struct {
-	Id                  string    `json:"id"`
+	Id                  int64     `json:"id"`
 	CreatedTime         time.Time `json:"createdTime"`
 	UpdatedTime         time.Time `json:"updatedTime"`
 	Address             string    `json:"address"`
@@ -110,9 +110,11 @@ type PoolDetailVo struct {
 	TokenName           string    `json:"tokenName"`
 	RewardsTokenName    string    `json:"rewardsTokenName"`
 	RewardsTokenAddress string    `json:"rewardsTokenAddress"`
-	EffectiveTime       string    `json:"effective_time"` // 生效时间
-	Rate                RateModel `json:"rate"`           // 基础利率值
-	NewRate             RateModel `json:"new_rate"`       // 新基础利率值
+	EffectiveTime       time.Time `json:"effectiveTime"` // 生效时间
+	Rate                RateModel `json:"rate"`          // 基础利率值
+	NewRate             RateModel `json:"newRate"`       // 新基础利率值
+	Apr                 float64   `json:"apr"`
+	BorrowAPR           float64   `json:"borrowAPR"`
 }
 
 type RateModel struct {
