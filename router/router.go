@@ -42,7 +42,7 @@ func poolRouter(r *gin.RouterGroup) {
 	r.POST("/getPoolList", GetPoolList)
 	r.GET("/getPoolDetail", GetPoolDetail)
 	r.POST("/getNFTs", GetNFTs)
-	r.POST("/getWNFTs", GetWNFTs)
+	//r.POST("/getWNFTs", GetWNFTs)
 
 }
 

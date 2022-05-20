@@ -99,22 +99,23 @@ type PoolListVo struct {
 }
 
 type PoolDetailVo struct {
-	Id                  int64     `json:"id"`
-	CreatedTime         time.Time `json:"createdTime"`
-	UpdatedTime         time.Time `json:"updatedTime"`
-	Address             string    `json:"address"`
-	Name                string    `json:"name"`
-	Url                 string    `json:"url"`
-	Owner               string    `json:"owner"`
-	TokenAddress        string    `json:"tokenAddress"`
-	TokenName           string    `json:"tokenName"`
-	RewardsTokenName    string    `json:"rewardsTokenName"`
-	RewardsTokenAddress string    `json:"rewardsTokenAddress"`
-	EffectiveTime       time.Time `json:"effectiveTime"` // 生效时间
-	Rate                RateModel `json:"rate"`          // 基础利率值
-	NewRate             RateModel `json:"newRate"`       // 新基础利率值
-	Apr                 float64   `json:"apr"`
-	BorrowAPR           float64   `json:"borrowAPR"`
+	Id                  int64      `json:"id"`
+	CreatedTime         time.Time  `json:"createdTime"`
+	UpdatedTime         time.Time  `json:"updatedTime"`
+	Address             string     `json:"address"`
+	Name                string     `json:"name"`
+	Url                 string     `json:"url"`
+	Owner               string     `json:"owner"`
+	TokenAddress        string     `json:"tokenAddress"`
+	TokenName           string     `json:"tokenName"`
+	RewardsTokenName    string     `json:"rewardsTokenName"`
+	RewardsTokenAddress string     `json:"rewardsTokenAddress"`
+	EffectiveTime       time.Time  `json:"effectiveTime"` // 生效时间
+	Rate                *RateModel `json:"rate"`          // 基础利率值
+	NewRate             *RateModel `json:"newRate"`       // 新基础利率值
+	Apr                 float64    `json:"apr"`
+	BorrowAPR           float64    `json:"borrowAPR"`
+	LiquidateLine       string     `json:"liquidate_line"` // 清算线
 }
 
 type RateModel struct {

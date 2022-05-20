@@ -6,11 +6,11 @@ type ReqMoralisVo struct {
 	Address      string `json:"address"`
 	TokenAddress string `json:"tokenAddress"`
 	Cursor       string `json:"cursor"`
-	Limit        string `json:"limit"`
+	PageSize     string `json:"pageSize"`
 }
 
 func InitReqMoralisVo() *ReqMoralisVo {
-	return &ReqMoralisVo{Cursor: "", Limit: "10"}
+	return &ReqMoralisVo{Cursor: "", PageSize: "10"}
 }
 
 type MoralisResVo struct {

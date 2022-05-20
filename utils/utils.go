@@ -56,6 +56,7 @@ func TransferPoolDetailVo(dto *db.Pool) *vo.PoolDetailVo {
 		Url:           dto.Url,
 		Owner:         dto.Owner,
 		EffectiveTime: dto.EffectiveTime,
+		LiquidateLine: dto.LiquidateLine,
 	}
 	poolTokens := db.GetPoolTokenByPoolId(dto.Id)
 
@@ -77,11 +78,16 @@ func TransferPoolDetailVo(dto *db.Pool) *vo.PoolDetailVo {
 	borrowerAPR, apr := CalculateAPR(dto.Rate, dto.Address)
 	res.BorrowAPR = borrowerAPR
 	res.Apr = apr
+	if dto.Rate != "" {
+		json.Unmarshal([]byte(dto.Rate), &rateMode)
+		res.Rate = &rateMode
+	}
 
-	json.Unmarshal([]byte(dto.Rate), &rateMode)
-	json.Unmarshal([]byte(dto.NewRate), &newRateModel)
-	res.Rate = rateMode
-	res.NewRate = newRateModel
+	if dto.NewRate != "" {
+		json.Unmarshal([]byte(dto.NewRate), &newRateModel)
+		res.NewRate = &newRateModel
+	}
+
 	return &res
 }
 

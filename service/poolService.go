@@ -41,6 +41,11 @@ func GetPoolListService(req *vo.ReqVo) *vo.ResponsePageVo {
 func GetPoolDetail(id int64) *vo.ResponseVo {
 	poolDetail := db.GetPoolById(id)
 
+	if poolDetail == nil {
+		return vo.NewResponseVo(config.SUCCESS, nil)
+	}
+
+	//数据包装
 	res := utils.TransferPoolDetailVo(poolDetail)
 
 	return vo.NewResponseVo(config.SUCCESS, res)

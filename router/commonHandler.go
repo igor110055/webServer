@@ -26,7 +26,7 @@ func GetTokenByAddress(c *gin.Context) {
 	}
 	defer c.Set("req", reqVo)
 	req, _ := http.NewRequest("GET", config.MORALIS.Url+reqVo.Address+"/nft/"+reqVo.TokenAddress+"?chain="+
-		config.MORALIS.ChainId+"&cursor="+reqVo.Cursor+"&limit="+reqVo.Limit, nil)
+		config.MORALIS.ChainId+"&cursor="+reqVo.Cursor+"&limit="+reqVo.PageSize, nil)
 	// 设置请求头
 	req.Header.Set("X-API-Key", config.MORALIS.Key)
 	resp, err := http.DefaultClient.Do(req)

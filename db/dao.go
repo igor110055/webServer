@@ -119,6 +119,9 @@ func GetPoolById(id int64) *Pool {
 		log.Error(res.Error)
 		return nil
 	}
+	if res.RowsAffected == 0 {
+		return nil
+	}
 	return &result
 }
 
