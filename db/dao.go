@@ -71,7 +71,6 @@ func GetPoolsByQuery(req *vo.ReqPoolVo) (*[]vo.DepositListVo, int64) {
 	return &result, totalSize
 }
 
-//TODO 按照首字母排序
 func GetPoolList(pageNum, pageSize int64) (*[]PoolListDto, int64) {
 	var result []PoolListDto
 	var totalSize int64
@@ -89,7 +88,7 @@ func GetPoolList(pageNum, pageSize int64) (*[]PoolListDto, int64) {
 			"pt.token_address," +
 			"pt.type").
 		Joins("LEFT JOIN pool_token pt ON pt.pool_id = p.id and pt.deleted = 0 and type = 'erc721'").
-		Where("p.deleted = 0").Group("p.address")
+		Where("p.deleted = 0").Group("p.address").Order("p.name asc")
 
 	//计算总页数
 	countResult := query.Count(&totalSize)
