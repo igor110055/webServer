@@ -110,6 +110,7 @@ type PoolDetailVo struct {
 	TokenName           string     `json:"tokenName"`
 	RewardsTokenName    string     `json:"rewardsTokenName"`
 	RewardsTokenAddress string     `json:"rewardsTokenAddress"`
+	WNFTAddress         string     `json:"wnftAddress"`
 	EffectiveTime       time.Time  `json:"effectiveTime"` // 生效时间
 	Rate                *RateModel `json:"rate"`          // 基础利率值
 	NewRate             *RateModel `json:"newRate"`       // 新基础利率值

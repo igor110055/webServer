@@ -73,6 +73,7 @@ func TransferPoolDetailVo(dto *db.Pool) *vo.PoolDetailVo {
 		} else if value.Type == "erc721" {
 			res.TokenName = value.TokenName
 			res.TokenAddress = value.TokenAddress
+			res.WNFTAddress = value.WnftAddress
 		}
 	}
 	borrowerAPR, apr := CalculateAPR(dto.Rate, dto.Address)
