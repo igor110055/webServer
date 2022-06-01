@@ -37,13 +37,12 @@ func TransferPoolListVo(dto db.PoolListDto) *vo.PoolListVo {
 		Type:         dto.Type,
 	}
 
-	borrowerAPR, apr := CalculateAPR(dto.Rate, dto.Address)
+	borrowerAPR, apr := calculateAPR(dto.Rate, dto.Address)
 	listVo.BorrowAPR = borrowerAPR
 	listVo.Apr = apr
 	return &listVo
 }
 
-//计算年化利率
 func TransferPoolDetailVo(dto *db.Pool) *vo.PoolDetailVo {
 	var rateMode, newRateModel vo.RateModel
 
@@ -58,7 +57,7 @@ func TransferPoolDetailVo(dto *db.Pool) *vo.PoolDetailVo {
 		EffectiveTime: dto.EffectiveTime,
 		LiquidateLine: dto.LiquidateLine,
 	}
-	poolTokens := db.GetPoolTokenByPoolId(dto.Id)
+	poolTokens := db.GetPoolTokenByPoolAddress(dto.Address)
 
 	if poolTokens == nil {
 		return &res
@@ -74,9 +73,12 @@ func TransferPoolDetailVo(dto *db.Pool) *vo.PoolDetailVo {
 			res.TokenName = value.TokenName
 			res.TokenAddress = value.TokenAddress
 			res.WNFTAddress = value.WnftAddress
+			res.WrapperAddress = value.WrapperAddress
 		}
 	}
-	borrowerAPR, apr := CalculateAPR(dto.Rate, dto.Address)
+
+	//计算年化利率
+	borrowerAPR, apr := calculateAPR(dto.Rate, dto.Address)
 	res.BorrowAPR = borrowerAPR
 	res.Apr = apr
 	if dto.Rate != "" {
@@ -92,7 +94,7 @@ func TransferPoolDetailVo(dto *db.Pool) *vo.PoolDetailVo {
 	return &res
 }
 
-func CalculateAPR(rate, poolAddress string) (float64, float64) {
+func calculateAPR(rate, poolAddress string) (float64, float64) {
 	var borrowerAPR, apr float64
 	if rate == "" {
 		return 0, 0

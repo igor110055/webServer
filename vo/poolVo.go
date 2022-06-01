@@ -111,12 +111,13 @@ type PoolDetailVo struct {
 	RewardsTokenName    string     `json:"rewardsTokenName"`
 	RewardsTokenAddress string     `json:"rewardsTokenAddress"`
 	WNFTAddress         string     `json:"wnftAddress"`
+	WrapperAddress      string     `json:"wrapperAddress"`
 	EffectiveTime       time.Time  `json:"effectiveTime"` // 生效时间
 	Rate                *RateModel `json:"rate"`          // 基础利率值
 	NewRate             *RateModel `json:"newRate"`       // 新基础利率值
 	Apr                 float64    `json:"apr"`
 	BorrowAPR           float64    `json:"borrowAPR"`
-	LiquidateLine       string     `json:"liquidate_line"` // 清算线
+	LiquidateLine       float64    `json:"liquidate_line"` // 清算线
 }
 
 type RateModel struct {

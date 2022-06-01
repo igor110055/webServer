@@ -2,12 +2,10 @@ package router
 
 import (
 	"github.com/gin-gonic/gin"
-	log "github.com/sirupsen/logrus"
 	"net/http"
 	"poolServer/config"
 	"poolServer/service"
 	"poolServer/vo"
-	"strconv"
 )
 
 func GetDepositList(c *gin.Context) {
@@ -48,21 +46,21 @@ func GetBorrowsList(c *gin.Context) {
 }
 
 func GetPoolDetail(c *gin.Context) {
-	id := c.Query("id")
-	if id == "" {
+	address := c.Query("address")
+	if address == "" {
 		c.JSON(http.StatusOK, vo.NewResponseVo(config.INVALID_PARAMS, nil))
 		return
 	}
 	//记录日志
-	defer c.Set("req", id)
+	defer c.Set("req", map[string]string{"address": address})
 
-	//string =>int64
-	idInt64, err := strconv.ParseInt(id, 10, 64)
-	if err != nil {
-		log.Error(err)
-	}
+	////string =>int64
+	//idInt64, err := strconv.ParseInt(id, 10, 64)
+	//if err != nil {
+	//	log.Error(err)
+	//}
 
-	result := service.GetPoolDetail(idInt64)
+	result := service.GetPoolDetail(address)
 	if result == nil {
 		c.JSON(http.StatusOK, vo.NewResponseVo(config.INTERNAL_ERROR, nil))
 		return

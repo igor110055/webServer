@@ -34,7 +34,7 @@ func GetPoolsByQuery(req *vo.ReqPoolVo) (*[]vo.DepositListVo, int64) {
 			"pt.wrapper_address," +
 			"pt.wnft_address," +
 			"t.delegator_address ").
-		Joins("LEFT JOIN pool_token pt ON pt.pool_id = p.id and pt.deleted = 0 and type = 'erc20'").
+		Joins("LEFT JOIN pool_token pt ON pt.pool_address = p.address and pt.deleted = 0 and type = 'erc20'").
 		Joins("LEFT JOIN token t ON t.pool_address = p.address and t.deleted = 0").
 		Where("p.deleted = 0").Group("p.address")
 
@@ -87,7 +87,7 @@ func GetPoolList(pageNum, pageSize int64) (*[]PoolListDto, int64) {
 			"pt.token_name," +
 			"pt.token_address," +
 			"pt.type").
-		Joins("LEFT JOIN pool_token pt ON pt.pool_id = p.id and pt.deleted = 0 and type = 'erc721'").
+		Joins("LEFT JOIN pool_token pt ON pt.pool_address = p.address and pt.deleted = 0 and type = 'erc721'").
 		Where("p.deleted = 0").Group("p.address").Order("p.name asc")
 
 	//计算总页数
@@ -108,11 +108,11 @@ func GetPoolList(pageNum, pageSize int64) (*[]PoolListDto, int64) {
 	return &result, totalSize
 }
 
-func GetPoolById(id int64) *Pool {
+func GetPoolByAddress(address string) *Pool {
 	var result Pool
 	res := config.DB.
 		Table("pool").
-		Where("deleted = 0 and id = ?", id).
+		Where("deleted = 0 and address = ?", address).
 		Find(&result)
 	if res.Error != nil {
 		log.Error(res.Error)
@@ -124,11 +124,11 @@ func GetPoolById(id int64) *Pool {
 	return &result
 }
 
-func GetPoolTokenByPoolId(id int64) *[]PoolToken {
+func GetPoolTokenByPoolAddress(address string) *[]PoolToken {
 	var result []PoolToken
 	res := config.DB.
 		Table("pool_token").
-		Where("deleted = 0 and pool_id = ?", id).
+		Where("deleted = 0 and pool_address = ?", address).
 		Find(&result)
 	if res.Error != nil {
 		log.Error(res.Error)
@@ -155,7 +155,7 @@ func GetToken(req *vo.ReqNFTVo) (*[]vo.TokenVo, int64) {
 	}
 
 	if req.Status != "" {
-		query.Where("t.status = ? and t.borrower = '' ", req.Status)
+		query.Where("t.status = ? and t.borrower = '0x0000000000000000000000000000000000000000'", req.Status)
 	}
 	//计算总页数
 	countResult := query.Count(&totalSize)

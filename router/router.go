@@ -98,11 +98,11 @@ func ReqLog() gin.HandlerFunc {
 		marshal, _ := json.Marshal(get)
 		// 打印日志
 		logrus.WithFields(logrus.Fields{
+			"req_uri":     reqUrl,
+			"body":        string(marshal),
 			"status_code": statusCode,
 			"client_ip":   clientIP,
 			"req_method":  method,
-			"req_uri":     reqUrl,
-			"body":        string(marshal),
 		}).Info()
 	}
 }

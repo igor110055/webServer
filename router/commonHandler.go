@@ -13,7 +13,6 @@ import (
 
 func GetTimeStamp(c *gin.Context) {
 	unix := time.Now().Unix()
-	defer c.Set("req", unix)
 	c.JSON(http.StatusOK, vo.NewResponseVo(config.SUCCESS, unix))
 }
 

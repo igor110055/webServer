@@ -38,14 +38,14 @@ func GetPoolListService(req *vo.ReqVo) *vo.ResponsePageVo {
 	return vo.NewResponsePageVo(req.PageVo.PageNum, req.PageVo.PageSize, totalSize, config.SUCCESS, res)
 }
 
-func GetPoolDetail(id int64) *vo.ResponseVo {
-	poolDetail := db.GetPoolById(id)
+func GetPoolDetail(address string) *vo.ResponseVo {
+	poolDetail := db.GetPoolByAddress(address)
 
 	if poolDetail == nil {
 		return vo.NewResponseVo(config.SUCCESS, nil)
 	}
 
-	//数据包装
+	//数据包装--计算年化
 	res := utils.TransferPoolDetailVo(poolDetail)
 
 	return vo.NewResponseVo(config.SUCCESS, res)
