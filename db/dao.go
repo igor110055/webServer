@@ -147,15 +147,21 @@ func GetToken(req *vo.ReqNFTVo) (*[]vo.TokenVo, int64) {
 		Joins("left join pool_token pt on t.token_address = pt.token_address")
 
 	if req.Borrower != "" {
-		query.Where("t.borrower = ? ", req.Borrower)
+		query.Where("t.borrower = ?", req.Borrower)
 	}
 
 	if req.Mortgagor != "" {
-		query.Where("t.mortgagor = ? ", req.Mortgagor)
+		query.Where("t.mortgagor = ?", req.Mortgagor)
 	}
 
 	if req.Status != "" {
 		query.Where("t.status = ? and t.borrower = '0x0000000000000000000000000000000000000000'", req.Status)
+	}
+	if req.TokenId != "" {
+		query.Where("t.token_id like ?", "%"+req.TokenId+"%")
+	}
+	if req.DelegatorAddress != "" {
+		query.Where("t.delegator_address like ?", "%"+req.DelegatorAddress+"%")
 	}
 	//计算总页数
 	countResult := query.Count(&totalSize)
