@@ -6,16 +6,6 @@ import (
 	"poolServer/vo"
 )
 
-//func GetPictures(t string) *[]Picture {
-//	var result []Picture
-//	res := config.DB.Table("picture").Where("type = ? and deleted = 0", t).Find(&result)
-//	if res.Error != nil {
-//		log.Error(res.Error)
-//		return nil
-//	}
-//	return &result
-//}
-
 func GetPoolsByQuery(req *vo.ReqPoolVo) (*[]vo.DepositListVo, int64) {
 	var result []vo.DepositListVo
 	var totalSize int64
@@ -144,7 +134,7 @@ func GetToken(req *vo.ReqNFTVo) (*[]vo.TokenVo, int64) {
 		Select("t.id,"+
 			"t.token_id,t.token_address,t.token_uri,t.borrower,t.mortgagor,t.status,t.delegator_address,pt.token_name").
 		Where("t.deleted = 0 and t.pool_address = ?", req.PoolAddress).
-		Joins("left join pool_token pt on t.token_address = pt.token_address")
+		Joins("left join pool_token pt on t.token_address = pt.token_address and pt.deleted = 0")
 
 	if req.Borrower != "" {
 		query.Where("t.borrower = ?", req.Borrower)
@@ -215,7 +205,7 @@ func GetTotalBorrower(poolAddress string) (int64, int64) {
 		log.Error(b.Error)
 	}
 
-	t := config.DB.Table("token").Where("deleted = 0 and status = 1 and pool_address = ?", poolAddress).
+	t := config.DB.Table("token").Where("deleted = 0 and pool_address = ?", poolAddress).
 		Count(&total)
 
 	if t.Error != nil {

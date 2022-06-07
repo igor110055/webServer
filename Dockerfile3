@@ -1,0 +1,19 @@
+FROM alpine:latest
+MAINTAINER ps
+ENV VERSION 1.0
+
+WORKDIR /apps
+
+
+COPY poolServer /apps
+COPY config/application.yml /apps/config/application.yml
+
+# 设置时区
+RUN apk add --no-cache tzdata
+ENV TZ Asia/Shanghai
+
+ENV LANG C.UTF-8
+
+EXPOSE 8200
+
+ENTRYPOINT ["/apps/poolServer"]

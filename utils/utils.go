@@ -110,9 +110,9 @@ func calculateAPR(rate, poolAddress string) (float64, float64) {
 	json.Unmarshal([]byte(rate), &model)
 
 	//如果使用率>边界利率
-	//(基础利率+(边界利率*利率因子)) + (使用率-边界利率*利率因子*加成系数)
+	//(基础利率+(边界利率*利率因子)) + (使用率-边界利率)*利率因子*加成系数
 	if utilizationRate > model.Kink {
-		borrowerAPR = (model.BaseRate + (model.Kink * model.Multiplier)) + (utilizationRate - model.Kink*model.Multiplier*model.JumpMultiplier)
+		borrowerAPR = (model.BaseRate + (model.Kink * model.Multiplier)) + (utilizationRate-model.Kink)*model.Multiplier*model.JumpMultiplier
 	} else {
 		//基础利率+(使用率*利率因子)
 		borrowerAPR = model.BaseRate + (utilizationRate * model.Multiplier)

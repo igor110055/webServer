@@ -11,6 +11,7 @@ import (
 )
 
 func APIRouter() *gin.Engine {
+	gin.SetMode(gin.ReleaseMode)
 	r := gin.Default()
 	r.Use(Cors())
 	//r.Use(TlsHandler())
@@ -32,7 +33,6 @@ func CollectRoute(r *gin.Engine) {
 func commonRouter(r *gin.RouterGroup) {
 	r.GET("/getTimeStamp", GetTimeStamp)
 	r.POST("/getTokenByAddress", GetTokenByAddress)
-	//r.GET("/getPictures", GetPictures)
 }
 
 func poolRouter(r *gin.RouterGroup) {
@@ -72,7 +72,7 @@ func TlsHandler() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		secureMiddleware := secure.New(secure.Options{
 			SSLRedirect: true,
-			SSLHost:     "localhost:8090",
+			SSLHost:     "localhost:8200",
 		})
 		err := secureMiddleware.Process(c.Writer, c.Request)
 		if err != nil {
