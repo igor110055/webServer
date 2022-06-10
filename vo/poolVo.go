@@ -94,8 +94,8 @@ type PoolListVo struct {
 	TokenName    string    `json:"tokenName"`
 	TokenAddress string    `json:"tokenAddress"`
 	Type         string    `json:"type"`
-	Apr          float64   `json:"apr"`
-	BorrowAPR    float64   `json:"borrowAPR"`
+	Apr          string    `json:"apr"`
+	BorrowAPR    string    `json:"borrowAPR"`
 }
 
 type PoolDetailVo struct {
@@ -115,8 +115,8 @@ type PoolDetailVo struct {
 	EffectiveTime       time.Time  `json:"effectiveTime"` // 生效时间
 	Rate                *RateModel `json:"rate"`          // 基础利率值
 	NewRate             *RateModel `json:"newRate"`       // 新基础利率值
-	Apr                 float64    `json:"apr"`
-	BorrowAPR           float64    `json:"borrowAPR"`
+	Apr                 string     `json:"apr"`
+	BorrowAPR           string     `json:"borrowAPR"`
 	LiquidateLine       float64    `json:"liquidate_line"` // 清算线
 }
 

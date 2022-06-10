@@ -2,6 +2,8 @@ package utils
 
 import (
 	"encoding/json"
+	"fmt"
+	"github.com/shopspring/decimal"
 	"poolServer/db"
 	"poolServer/vo"
 	"time"
@@ -94,30 +96,39 @@ func TransferPoolDetailVo(dto *db.Pool) *vo.PoolDetailVo {
 	return &res
 }
 
-func calculateAPR(rate, poolAddress string) (float64, float64) {
-	var borrowerAPR, apr float64
+func calculateAPR(rate, poolAddress string) (string, string) {
+	//var borrowerAPR, apr string
+	borrowerAPR := decimal.NewFromFloat(0)
 	if rate == "" {
-		return 0, 0
+		return "0", "0"
 	}
 
 	//calculateAPR
 	borrowers, total := db.GetTotalBorrower(poolAddress)
 	if total == 0 {
-		return 0, 0
+		return "0", "0"
 	}
-	utilizationRate := float64(borrowers) / float64(total)
+	utilizationRate := decimal.NewFromFloat(float64(borrowers)).Div(decimal.NewFromFloat(float64(total)))
 	model := vo.RateModel{}
 	json.Unmarshal([]byte(rate), &model)
+	base := decimal.NewFromFloat(model.BaseRate)
+	kink := decimal.NewFromFloat(model.Kink)
+	multiplier := decimal.NewFromFloat(model.Multiplier)
+	jumpMultiplier := decimal.NewFromFloat(model.JumpMultiplier)
 
 	//如果使用率>边界利率
 	//(基础利率+(边界利率*利率因子)) + (使用率-边界利率)*利率因子*加成系数
-	if utilizationRate > model.Kink {
-		borrowerAPR = (model.BaseRate + (model.Kink * model.Multiplier)) + (utilizationRate-model.Kink)*model.Multiplier*model.JumpMultiplier
+	if utilizationRate.Cmp(kink) == 1 {
+		//borrowerAPR = (model.BaseRate + (model.Kink * model.Multiplier)) + (utilizationRate-model.Kink)*model.Multiplier*model.JumpMultiplier
+		borrowerAPR = base.Add(kink.Mul(multiplier)).Add(utilizationRate.Sub(kink).Mul(multiplier).Mul(jumpMultiplier))
+		fmt.Println(borrowerAPR.String())
 	} else {
 		//基础利率+(使用率*利率因子)
-		borrowerAPR = model.BaseRate + (utilizationRate * model.Multiplier)
+		//borrowerAPR = model.BaseRate + (utilizationRate * model.Multiplier)
+		borrowerAPR = base.Add(utilizationRate.Mul(multiplier))
 	}
-	apr = borrowerAPR * utilizationRate
-	return borrowerAPR, apr
+	//apr = borrowerAPR * utilizationRate
+	apr := borrowerAPR.Mul(utilizationRate).String()
+	return borrowerAPR.String(), apr
 
 }

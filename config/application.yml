@@ -1,11 +1,11 @@
 #lcoal
 database:
   driverName: mysql
-  host: localhost
+  host: 8.210.48.242
   port: "3306"
   databaseName: pool
   username: root
-  password: root
+  password: Test20220303
   charset: utf8mb4
   loc: Asia/Shanghai
 
