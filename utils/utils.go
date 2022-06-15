@@ -6,7 +6,6 @@ import (
 	"github.com/shopspring/decimal"
 	"poolServer/db"
 	"poolServer/vo"
-	"time"
 )
 
 type NftVo struct {
@@ -18,12 +17,12 @@ type NftVo struct {
 	Number    int64  `json:"number"`
 }
 
-func TimeStampToTime(tm int64) time.Time {
-	tm = tm / 1000
-	timeFormat := time.Unix(tm, 0).Format("2006-01-02 15:04:05")
-	duration, _ := time.ParseInLocation("2006-01-02 15:04:05", timeFormat, time.Local)
-	return duration
-}
+//func TimeStampToTime(tm int64) time.Time {
+//	tm = tm / 1000
+//	timeFormat := time.Unix(tm, 0).Format("2006-01-02 15:04:05")
+//	duration, _ := time.ParseInLocation("2006-01-02 15:04:05", timeFormat, time.Local)
+//	return duration
+//}
 
 func TransferPoolListVo(dto db.PoolListDto) *vo.PoolListVo {
 	listVo := vo.PoolListVo{
@@ -99,16 +98,18 @@ func TransferPoolDetailVo(dto *db.Pool) *vo.PoolDetailVo {
 func calculateAPR(rate, poolAddress string) (string, string) {
 	//var borrowerAPR, apr string
 	borrowerAPR := decimal.NewFromFloat(0)
+	utilizationRate := decimal.NewFromFloat(0)
 	if rate == "" {
 		return "0", "0"
 	}
 
 	//calculateAPR
 	borrowers, total := db.GetTotalBorrower(poolAddress)
-	if total == 0 {
-		return "0", "0"
+	//防止分母为0
+	if total != 0 {
+		utilizationRate = decimal.NewFromFloat(float64(borrowers)).Div(decimal.NewFromFloat(float64(total)))
 	}
-	utilizationRate := decimal.NewFromFloat(float64(borrowers)).Div(decimal.NewFromFloat(float64(total)))
+
 	model := vo.RateModel{}
 	json.Unmarshal([]byte(rate), &model)
 	base := decimal.NewFromFloat(model.BaseRate)
@@ -116,16 +117,18 @@ func calculateAPR(rate, poolAddress string) (string, string) {
 	multiplier := decimal.NewFromFloat(model.Multiplier)
 	jumpMultiplier := decimal.NewFromFloat(model.JumpMultiplier)
 
-	//如果使用率>边界利率
-	//(基础利率+(边界利率*利率因子)) + (使用率-边界利率)*利率因子*加成系数
 	if utilizationRate.Cmp(kink) == 1 {
+		//如果使用率>边界利率
+		//(基础利率+(边界利率*利率因子)) + (使用率-边界利率)*利率因子*加成系数
 		//borrowerAPR = (model.BaseRate + (model.Kink * model.Multiplier)) + (utilizationRate-model.Kink)*model.Multiplier*model.JumpMultiplier
 		borrowerAPR = base.Add(kink.Mul(multiplier)).Add(utilizationRate.Sub(kink).Mul(multiplier).Mul(jumpMultiplier))
 		fmt.Println(borrowerAPR.String())
 	} else {
+		//如果使用<=边界利率
 		//基础利率+(使用率*利率因子)
 		//borrowerAPR = model.BaseRate + (utilizationRate * model.Multiplier)
 		borrowerAPR = base.Add(utilizationRate.Mul(multiplier))
+		fmt.Println(borrowerAPR.String())
 	}
 	//apr = borrowerAPR * utilizationRate
 	apr := borrowerAPR.Mul(utilizationRate).String()

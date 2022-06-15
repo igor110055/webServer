@@ -18,5 +18,3 @@ moralis:
   url: "https://deep-index.moralis.io/api/v2/"
   chainId: "0x61"
   key: "dXEk5PiV0qmNUHfKeEWdrf9Iu8OpanzXHRi3tLzAxxf9rwShOECim67VeQJdjwbv"
-
-controllerAddress: "0x099651e3BaaE396b2DB2E9C5A33D54571e291680"

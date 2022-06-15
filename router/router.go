@@ -11,6 +11,7 @@ import (
 )
 
 func APIRouter() *gin.Engine {
+	//正式环境
 	gin.SetMode(gin.ReleaseMode)
 	r := gin.Default()
 	r.Use(Cors())
